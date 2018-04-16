@@ -19,9 +19,14 @@ namespace SpaceGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Player p1;
+        Camera2D m_camera;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.SynchronizeWithVerticalRetrace = false;
+            IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
         }
 
@@ -34,6 +39,8 @@ namespace SpaceGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            m_camera = new Camera2D(GraphicsDevice.Viewport);
+            m_camera.Zoom = 1;
 
             base.Initialize();
         }
@@ -46,6 +53,7 @@ namespace SpaceGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            p1 = new Player(Content);
 
             // TODO: use this.Content to load your game content here
         }
@@ -66,12 +74,15 @@ namespace SpaceGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            p1.update();
             // TODO: Add your update logic here
 
+            m_camera.Location = p1.player_pos;
             base.Update(gameTime);
         }
 
@@ -85,6 +96,11 @@ namespace SpaceGame
 
             // TODO: Add your drawing code here
 
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
+            p1.draw(spriteBatch);
+            spriteBatch.End();
+   
+ 
             base.Draw(gameTime);
         }
     }
