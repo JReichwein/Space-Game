@@ -72,15 +72,23 @@ namespace SpaceGame
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        int ticks = 0;
         protected override void Update(GameTime gameTime)
         {
             
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
             p1.update();
             // TODO: Add your update logic here
+
+            if (gameTime.TotalGameTime.TotalSeconds == 1)
+            {
+                Console.WriteLine(ticks);
+            } else
+                ticks++;
 
             m_camera.Location = p1.player_pos;
             base.Update(gameTime);

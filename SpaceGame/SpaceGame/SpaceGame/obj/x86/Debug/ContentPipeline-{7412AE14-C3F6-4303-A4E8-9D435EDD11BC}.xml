@@ -10,6 +10,15 @@
       <Output>C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Player.xnb</Output>
       <Time>2018-04-16T10:13:57.2136441-05:00</Time>
     </Item>
+    <Item>
+      <Source>Missile.png</Source>
+      <Name>Missile</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Missile.xnb</Output>
+      <Time>2018-04-18T09:07:40.8813205-05:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{7412AE14-C3F6-4303-A4E8-9D435EDD11BC}</ContentProjectGUID>

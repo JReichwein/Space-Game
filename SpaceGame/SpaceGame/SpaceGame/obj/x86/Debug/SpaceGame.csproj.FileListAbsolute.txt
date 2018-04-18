@@ -32,3 +32,4 @@ C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\
 C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.exe
 C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.pdb
+C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Missile.xnb
