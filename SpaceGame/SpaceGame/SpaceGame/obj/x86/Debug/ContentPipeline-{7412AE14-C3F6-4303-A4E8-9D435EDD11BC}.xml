@@ -10,6 +10,15 @@
       <Output>C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Player.xnb</Output>
       <Time>2018-04-16T09:47:01.8620877-05:00</Time>
     </Item>
+    <Item>
+      <Source>Asteroid1.png</Source>
+      <Name>Asteroid1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Asteroid1.xnb</Output>
+      <Time>2018-04-18T09:25:23.9266927-05:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{7412AE14-C3F6-4303-A4E8-9D435EDD11BC}</ContentProjectGUID>
