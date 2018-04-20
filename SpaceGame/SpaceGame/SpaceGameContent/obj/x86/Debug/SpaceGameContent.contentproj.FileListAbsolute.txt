@@ -1,9 +1,0 @@
-<<<<<<< HEAD
-\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGameContent\obj\x86\Debug\SpaceGameContent.contentprojResolveAssemblyReference.cache
-=======
-<<<<<<< HEAD
-C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGameContent\obj\x86\Debug\SpaceGameContent.contentprojResolveAssemblyReference.cache
-=======
-C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGameContent\obj\x86\Debug\SpaceGameContent.contentprojResolveAssemblyReference.cache
->>>>>>> 04acd0732216ac171a4c3946c5c8fd48e5200662
->>>>>>> 856c0a940023f4348594b891f79c6c7b0511ddec

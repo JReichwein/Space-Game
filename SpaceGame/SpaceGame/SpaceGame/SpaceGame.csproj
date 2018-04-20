@@ -58,7 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Hub.cs" />
-    <Compile Include="astroids.cs" />
     <Compile Include="map.cs" />
     <Compile Include="Missile.cs" />
     <Compile Include="Player.cs" />
