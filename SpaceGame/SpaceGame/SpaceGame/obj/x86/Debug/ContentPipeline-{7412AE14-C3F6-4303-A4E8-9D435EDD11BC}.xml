@@ -7,6 +7,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
+<<<<<<< HEAD
       <Output>\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Player.xnb</Output>
       <Time>2018-04-18T08:46:43.7321884-05:00</Time>
     </Item>
@@ -27,6 +28,28 @@
       <Options>None</Options>
       <Output>\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Hub.xnb</Output>
       <Time>2018-04-18T09:08:34.331376-05:00</Time>
+=======
+      <Output>C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Player.xnb</Output>
+      <Time>2018-04-16T10:13:57.2136441-05:00</Time>
+    </Item>
+    <Item>
+      <Source>Missile.png</Source>
+      <Name>Missile</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Missile.xnb</Output>
+      <Time>2018-04-18T09:07:40.8813205-05:00</Time>
+    </Item>
+    <Item>
+      <Source>Asteroid1.png</Source>
+      <Name>Asteroid1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Asteroid1.xnb</Output>
+      <Time>2018-04-18T09:25:23.9266927-05:00</Time>
+>>>>>>> 856c0a940023f4348594b891f79c6c7b0511ddec
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
@@ -35,10 +58,17 @@
       <TargetProfile>Reach</TargetProfile>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
+<<<<<<< HEAD
       <RootDirectory>\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGameContent\</RootDirectory>
       <LoggerRootDirectory>\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\</LoggerRootDirectory>
       <IntermediateDirectory>\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\</IntermediateDirectory>
       <OutputDirectory>\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\</OutputDirectory>
+=======
+      <RootDirectory>C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGameContent\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\</OutputDirectory>
+>>>>>>> 856c0a940023f4348594b891f79c6c7b0511ddec
     </Settings>
     <Assemblies>
       <Assembly>

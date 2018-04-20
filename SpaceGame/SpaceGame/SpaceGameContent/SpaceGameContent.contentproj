@@ -37,6 +37,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="Hub Radius.png">
       <Name>Hub Radius</Name>
       <Importer>TextureImporter</Importer>
@@ -44,6 +45,15 @@
     </Compile>
     <Compile Include="Hub.png">
       <Name>Hub</Name>
+=======
+<<<<<<< HEAD
+    <Compile Include="Asteroid1.png">
+      <Name>Asteroid1</Name>
+=======
+    <Compile Include="Missile.png">
+      <Name>Missile</Name>
+>>>>>>> 04acd0732216ac171a4c3946c5c8fd48e5200662
+>>>>>>> 856c0a940023f4348594b891f79c6c7b0511ddec
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
