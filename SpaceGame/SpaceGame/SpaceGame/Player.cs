@@ -33,6 +33,11 @@ namespace SpaceGame
         {
             Bounds = viewport.Bounds;
         }
+
+        public Rectangle getBounds()
+        {
+            return Bounds;
+        }
     };
 
     class Player

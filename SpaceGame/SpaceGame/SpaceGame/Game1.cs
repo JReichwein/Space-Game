@@ -20,6 +20,7 @@ namespace SpaceGame
         SpriteBatch spriteBatch;
 
         Player p1;
+        Hub hub;
         Camera2D m_camera;
 
         public Game1()
@@ -54,6 +55,7 @@ namespace SpaceGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             p1 = new Player(Content);
+            hub = new Hub(Content);
 
             // TODO: use this.Content to load your game content here
         }
@@ -98,6 +100,7 @@ namespace SpaceGame
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
             p1.draw(spriteBatch);
+            hub.Draw(spriteBatch);
             spriteBatch.End();
    
  
