@@ -81,7 +81,7 @@ namespace SpaceGame
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            p1.update();
+            p1.update(gameTime);
             // TODO: Add your update logic here
 
             if (gameTime.TotalGameTime.TotalSeconds == 1)

@@ -61,9 +61,9 @@ namespace SpaceGame
             Console.WriteLine(rateOfFire);
         }
 
-        public void update()
+        public void update(GameTime gameTime)
         {
-            controller();
+            controller(gameTime);
 
             player_pos.X = (int)x;
             player_pos.Y = (int)y;
@@ -74,8 +74,10 @@ namespace SpaceGame
             return new Vector2((float)Math.Sin(angle), -(float)Math.Cos(angle));
         }
 
-        int ticks = 0;
-        public void controller()
+        float timer = 10;
+        const float RESET_TIME = 10;
+
+        public void controller(GameTime gameTime)
         {
             GamePadState pad = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
             ang = (float)MathHelper.ToDegrees((float)ang);
@@ -104,12 +106,16 @@ namespace SpaceGame
             }
 
             // TODO: Make the time better.
-            ticks++;
-            if (ticks % 4000 == 0)
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            timer -= elapsed;
+            if (timer < 0)
             {
-                Console.WriteLine("Shoot: " + ticks / 4000);
+                //Timer expired, execute action
+                Console.WriteLine("Shoot");
+
+                timer = RESET_TIME;   //Reset Timer
             }
-        }
+    }
 
         public void draw(SpriteBatch pen)
         {
