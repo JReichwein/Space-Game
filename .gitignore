@@ -3,3 +3,7 @@
 *.pdb
 *.exe
 *.cache
+*.xnb
+*.txt
+*.xml
+*.contentproj

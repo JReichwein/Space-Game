@@ -84,6 +84,8 @@ namespace SpaceGame
 
         public void controller(GameTime gameTime)
         {
+            var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             GamePadState pad = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
             ang = (float)MathHelper.ToDegrees((float)ang);
 
@@ -99,8 +101,8 @@ namespace SpaceGame
             {
                 Vector2 new_pos = angleToVector(MathHelper.ToRadians((float)ang));
 
-                x += new_pos.X * .05;
-                y += new_pos.Y * .05;
+                x += new_pos.X * delta * 200;
+                y += new_pos.Y * delta * 200;
 
                 oldang = ang;
                 ang = (float)MathHelper.ToRadians((float)ang);
@@ -116,7 +118,7 @@ namespace SpaceGame
             if (timer < 0)
             {
                 //Timer expired, execute action
-                Console.WriteLine("Shoot");
+               // Console.WriteLine("Shoot");
 
                 timer = RESET_TIME;   //Reset Timer
             }
