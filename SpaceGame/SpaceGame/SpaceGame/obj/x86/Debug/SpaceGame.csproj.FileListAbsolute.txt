@@ -15,6 +15,30 @@ C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\S
 C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.exe
 C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.pdb
+<<<<<<< HEAD
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.csprojResolveAssemblyReference.cache
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.exe
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.pdb
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Player.xnb
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Hub Radius.xnb
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Hub.xnb
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\SpaceGame.exe
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\SpaceGame.pdb
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.dll
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Game.dll
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.dll
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.dll
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.dll
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.xml
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Game.xml
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.xml
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.xml
+\\Fisd-student1\hs\lshs\151710\Documents\GitHub\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.xml
+=======
+<<<<<<< HEAD
+C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Asteroid1.xnb
+=======
 C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Player.xnb
 C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\SpaceGame.exe
 C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\SpaceGame.pdb
@@ -33,3 +57,5 @@ C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\
 C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.exe
 C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.pdb
 C:\Users\145371\Desktop\Github\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Missile.xnb
+>>>>>>> 04acd0732216ac171a4c3946c5c8fd48e5200662
+>>>>>>> 856c0a940023f4348594b891f79c6c7b0511ddec
