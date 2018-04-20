@@ -37,8 +37,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="Asteroid1.png">
       <Name>Asteroid1</Name>
+=======
+    <Compile Include="Missile.png">
+      <Name>Missile</Name>
+>>>>>>> 04acd0732216ac171a4c3946c5c8fd48e5200662
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

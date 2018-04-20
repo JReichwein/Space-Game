@@ -37,7 +37,8 @@ namespace SpaceGame
 
     class Player
     {
-  
+
+        public List<Missile> missiles = new List<Missile>();
 
         private Texture2D texture;
         public Vector2 player_pos;
@@ -48,11 +49,16 @@ namespace SpaceGame
         private double vel = 1.2;
         private double oldang = 0;
 
+        //Properties
+        private double armor = 0.0;
+        private int rateOfFire = 1000 / 1;
+
         public Player(ContentManager man)
         {
             texture = man.Load<Texture2D>("Player");
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
             player_pos = new Vector2((int)x, (int)y);
+            Console.WriteLine(rateOfFire);
         }
 
         public void update()
@@ -68,6 +74,7 @@ namespace SpaceGame
             return new Vector2((float)Math.Sin(angle), -(float)Math.Cos(angle));
         }
 
+        int ticks = 0;
         public void controller()
         {
             GamePadState pad = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
@@ -96,7 +103,12 @@ namespace SpaceGame
                 ang = (float)MathHelper.ToRadians((float)oldang);
             }
 
-
+            // TODO: Make the time better.
+            ticks++;
+            if (ticks % 4000 == 0)
+            {
+                Console.WriteLine("Shoot: " + ticks / 4000);
+            }
         }
 
         public void draw(SpriteBatch pen)
