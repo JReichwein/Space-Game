@@ -74,23 +74,16 @@ namespace SpaceGame
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        int ticks = 0;
         protected override void Update(GameTime gameTime)
         {
-            
+
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            p1.update(gameTime);
+            p1.update(gameTime, Content);
             // TODO: Add your update logic here
-
-            if (gameTime.TotalGameTime.TotalSeconds == 1)
-            {
-                Console.WriteLine(ticks);
-            } else
-                ticks++;
 
             m_camera.Location = p1.player_pos;
             base.Update(gameTime);
@@ -107,11 +100,11 @@ namespace SpaceGame
             // TODO: Add your drawing code here
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
-            p1.draw(spriteBatch);
+            p1.draw(spriteBatch, gameTime);
             hub.Draw(spriteBatch);
             spriteBatch.End();
-   
- 
+
+
             base.Draw(gameTime);
         }
     }
