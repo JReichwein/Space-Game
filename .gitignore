@@ -7,3 +7,7 @@
 *.txt
 *.xml
 *.contentproj
+*.exe
+*.pdb
+*.cachefile
+*.contentproj

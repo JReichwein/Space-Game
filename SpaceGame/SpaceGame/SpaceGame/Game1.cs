@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Threading;
 
 namespace SpaceGame
 {
@@ -22,13 +23,60 @@ namespace SpaceGame
         Player p1;
         Hub hub;
         Camera2D m_camera;
+        map mp;
+        Texture2D rock;
+        ThreadStart update;
+        Thread drawing;
+        List<Rectangle> draw;
+        bool drawCall = false;
+
+        public static int MAX_RENDER_DISTANCE = 500;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.SynchronizeWithVerticalRetrace = false;
-            IsFixedTimeStep = false;
+            //graphics.SynchronizeWithVerticalRetrace = false;
+            //IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
+        }
+
+        void drawRocks()
+        {
+            for (int i = 0; i < mp.len; i++)
+            {
+                for (int y = 0; y < mp.len; y++)
+                {
+                    if (mp.world[i, y] == "R")
+                    {
+                        Vector2 rect = new Vector2(i * 50, y * 50);
+                        if (Vector2.Distance(p1.player_pos, rect) <= MAX_RENDER_DISTANCE)
+                        {
+                            draw.Add(new Rectangle(i * 50, y * 50, 20, 20));
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+        public void update_()
+        {
+            while (true)
+            {
+                if (drawCall == true)
+                {
+                    drawRocks();
+                    drawCall = false;
+                }
+            }
+        }
+
+        protected override void OnExiting(Object sender, EventArgs args)
+        {
+            base.OnExiting(sender, args);
+
+            drawing.Abort();
         }
 
         /// <summary>
@@ -42,7 +90,9 @@ namespace SpaceGame
             // TODO: Add your initialization logic here
             m_camera = new Camera2D(GraphicsDevice.Viewport);
             m_camera.Zoom = 1;
-
+            update = new ThreadStart(update_);
+            draw = new List<Rectangle>();
+            drawing = new Thread(update_);
             base.Initialize();
         }
 
@@ -56,7 +106,10 @@ namespace SpaceGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
             p1 = new Player(Content);
             hub = new Hub(Content);
-
+            mp = new map(100);
+            mp.generate();
+            drawing.Start();
+            rock = Content.Load<Texture2D>("Asteroid1");
             // TODO: use this.Content to load your game content here
         }
 
@@ -84,6 +137,7 @@ namespace SpaceGame
                 this.Exit();
 
             p1.update(gameTime);
+          
             // TODO: Add your update logic here
 
             if (gameTime.TotalGameTime.TotalSeconds == 1)
@@ -108,6 +162,19 @@ namespace SpaceGame
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
             p1.draw(spriteBatch);
+
+            if (!drawCall)
+            {
+                for (int i = 0; i < draw.Count; i++)
+                {
+
+                    spriteBatch.Draw(rock, draw[i], Color.LightPink);
+                    draw.RemoveAt(i);
+                    i--;
+                }
+            }
+            drawCall = true;
+
             hub.Draw(spriteBatch);
             spriteBatch.End();
    
