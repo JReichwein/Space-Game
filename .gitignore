@@ -5,4 +5,12 @@
 *.xnb
 *.txt
 *.xml
+<<<<<<< HEAD
 *.contentproj
+=======
+*.contentproj
+*.exe
+*.pdb
+*.cachefile
+*.contentproj
+>>>>>>> 379bd3f9c6347063b159cc7dc4d94938aad6e055
