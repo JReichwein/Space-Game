@@ -174,7 +174,7 @@ namespace SpaceGame
 
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 timer += elapsed;
-                if (timer > 250)
+                if (timer > rateOfFire)
                 {
                     //Timer expired, execute action
                     missiles.Add(new Missile(c, player_pos, ang, origin));
