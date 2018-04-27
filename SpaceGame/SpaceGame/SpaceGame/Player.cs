@@ -64,12 +64,17 @@ namespace SpaceGame
         {
             texture = man.Load<Texture2D>("Player");
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
+<<<<<<< HEAD
             player_pos = new Vector2(x, y);
             //Console.WriteLine(rateOfFire);
+=======
+            player_pos = new Vector2((int)x, (int)y);
+>>>>>>> 00963cebe96f40327d2a7181176d628a6d70074b
         }
 
-        public void update(GameTime gameTime)
+        public void update(GameTime gameTime, ContentManager c)
         {
+<<<<<<< HEAD
             if (!controller(gameTime))
             {
                 keyboard(gameTime);
@@ -82,6 +87,14 @@ namespace SpaceGame
 
             player_pos.X = x;
             player_pos.Y = y;
+=======
+            controller(gameTime, c);
+
+            player_pos.X = (int)x;
+            player_pos.Y = (int)y;
+            foreach (Missile missile in missiles)
+                missile.Update(gameTime);
+>>>>>>> 00963cebe96f40327d2a7181176d628a6d70074b
         }
 
         Vector2 angleToVector(float angle)
@@ -89,10 +102,13 @@ namespace SpaceGame
             return new Vector2((float)Math.Sin(angle), -(float)Math.Cos(angle));
         }
 
-        float timer = 10;
-        const float RESET_TIME = 10;
+        float timer = 0;
 
+<<<<<<< HEAD
         public bool controller(GameTime gameTime)
+=======
+        public void controller(GameTime gameTime, ContentManager c)
+>>>>>>> 00963cebe96f40327d2a7181176d628a6d70074b
         {
             
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -128,19 +144,25 @@ namespace SpaceGame
             }
 
             // TODO: Make the time better.
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            timer -= elapsed;
-            if (timer < 0)
+            if (pad.IsButtonDown(Buttons.RightTrigger))
             {
-                //Timer expired, execute action
-               // Console.WriteLine("Shoot");
+                //Vector2 missile_pos = angleToVector(MathHelper.ToRadians((float)ang));
 
-                timer = RESET_TIME;   //Reset Timer
+                float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                timer += elapsed;
+                if (timer > 250)
+                {
+                    //Timer expired, execute action
+                    missiles.Add(new Missile(c, player_pos, ang, origin));
+
+                    timer = 0;   //Reset Timer
+                }
             }
             
             return false;
     }
 
+<<<<<<< HEAD
         public void keyboard(GameTime gameTime)
         {
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -205,8 +227,13 @@ namespace SpaceGame
 
 
         public void draw(SpriteBatch pen)
+=======
+        public void draw(SpriteBatch pen, GameTime gameTime)
+>>>>>>> 00963cebe96f40327d2a7181176d628a6d70074b
         {
             pen.Draw(texture, player_pos, null, Color.White, (float)ang, origin, 1.0f, SpriteEffects.None, 0f);
+            foreach (Missile missile in missiles)
+                missile.Draw(pen, gameTime);
         }
     }
 }

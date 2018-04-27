@@ -19,30 +19,36 @@ namespace SpaceGame
         double heading;
         double posX, posY;
 
-        public Missile(Texture2D texture, Vector2 location, double heading)
+        public Missile(ContentManager c, Vector2 location, double heading, Vector2 origin)
         {
-            missileTex = texture;
-            posX = location.X;
-            posY = location.Y;
-            missileRect = new Rectangle((int)posX, (int)posY, 28, 50);
-            missileCenter = new Vector2(missileRect.X + missileRect.Width / 2,
-                                        missileRect.Y + missileRect.Height / 2);
+            ContentManager content = c;
+            missileTex = content.Load<Texture2D>("Missile");
+            posX = location.X - 25;
+            posY = location.Y - 25;
+            missileRect = new Rectangle((int)posX, (int)posY, 50, 50);
+            missileCenter = new Vector2((float)posX + missileRect.Width,
+                                        (float)posY + missileRect.Height);
             this.heading = heading;
         }
 
         public void Update(GameTime gameTime)
         {
-            posX += 5 * Math.Cos(heading - 90);
-            posY += 5 * Math.Sin(heading - 90);
+            posX += 0.1 * Math.Sin(heading);
+            posY += 0.1 * -Math.Cos(heading);
             missileCenter = new Vector2((int)posX + missileRect.Width / 2,
                                         (int)posY + missileRect.Height / 2);
+        }
+
+        private float vectorToAngle(Vector2 angleVector)
+        {
+            return (float)Math.Atan2(angleVector.X, -angleVector.Y);
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             spriteBatch.Draw(missileTex, missileCenter, null, Color.White,
                 (float)heading,
-                new Vector2(missileTex.Width / 2, missileTex.Height / 2), 0.2f,
+                new Vector2(0,0), 0.01f,
                 SpriteEffects.None, 0);
         }
 
