@@ -58,7 +58,7 @@ namespace SpaceGame
 
         //Properties
         private double armor = 0.0;
-        private int rateOfFire = 1000 / 1;
+        private int rateOfFire = 1000 / 2;
 
         public Player(ContentManager man)
         {
@@ -115,7 +115,7 @@ namespace SpaceGame
 
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 timer += elapsed;
-                if (timer > 250)
+                if (timer > rateOfFire)
                 {
                     //Timer expired, execute action
                     missiles.Add(new Missile(c, player_pos, ang, origin));
