@@ -47,12 +47,14 @@ namespace SpaceGame
 
         private Texture2D texture;
         public Vector2 player_pos;
-        private double x = 300;
-        private double y = 300;
+        private float x = 300;
+        private float y = 300;
         private double ang = 0;
         private Vector2 origin;
         private double vel = 1.2;
         private double oldang = 0;
+        private double speed = 0.0;
+        private double topSpeed = 1.2;
 
         //Properties
         private double armor = 0.0;
@@ -62,16 +64,24 @@ namespace SpaceGame
         {
             texture = man.Load<Texture2D>("Player");
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
-            player_pos = new Vector2((int)x, (int)y);
-            Console.WriteLine(rateOfFire);
+            player_pos = new Vector2(x, y);
+            //Console.WriteLine(rateOfFire);
         }
 
         public void update(GameTime gameTime)
         {
-            controller(gameTime);
+            if (!controller(gameTime))
+            {
+                keyboard(gameTime);
+            }
+            else
+            {
+                
+            }
 
-            player_pos.X = (int)x;
-            player_pos.Y = (int)y;
+
+            player_pos.X = x;
+            player_pos.Y = y;
         }
 
         Vector2 angleToVector(float angle)
@@ -82,23 +92,26 @@ namespace SpaceGame
         float timer = 10;
         const float RESET_TIME = 10;
 
-        public void controller(GameTime gameTime)
+        public bool controller(GameTime gameTime)
         {
+            
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             GamePadState pad = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
-            ang = (float)MathHelper.ToDegrees((float)ang);
-
-
-
-            ang = MathHelper.ToDegrees((float)Math.Atan2(pad.ThumbSticks.Right.X, pad.ThumbSticks.Right.Y));
-            if (ang < 0)
-                ang += 360;
-            if (ang == 0)
-                ang = 0;
-
+            
             if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
             {
+                ang = (float)MathHelper.ToDegrees((float)ang);
+
+
+
+                ang = MathHelper.ToDegrees((float)Math.Atan2(pad.ThumbSticks.Right.X, pad.ThumbSticks.Right.Y));
+                if (ang < 0)
+                    ang += 360;
+                if (ang == 0)
+                    ang = 0;
+
+
                 Vector2 new_pos = angleToVector(MathHelper.ToRadians((float)ang));
 
                 x += new_pos.X * delta * 200;
@@ -106,10 +119,12 @@ namespace SpaceGame
 
                 oldang = ang;
                 ang = (float)MathHelper.ToRadians((float)ang);
+                return true;
             }
             else
             {
-                ang = (float)MathHelper.ToRadians((float)oldang);
+                //ang = (float)MathHelper.ToRadians((float)oldang);
+                return false;
             }
 
             // TODO: Make the time better.
@@ -122,7 +137,72 @@ namespace SpaceGame
 
                 timer = RESET_TIME;   //Reset Timer
             }
+            
+            return false;
     }
+
+        public void keyboard(GameTime gameTime)
+        {
+            var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            KeyboardState kb = Keyboard.GetState();
+            oldang = ang;
+            bool moved = false;
+
+            if (speed < 0.0f)
+                speed = 0.0f;
+
+            if (speed > topSpeed)
+                speed = topSpeed;
+
+            if (kb.IsKeyDown(Keys.W) || kb.IsKeyDown(Keys.Up))
+            {
+                moved = true;
+
+                //accell
+                if (speed < topSpeed)
+                    speed += 0.1f;
+
+            }
+            else
+            {
+                //const movement
+                Vector2 new_pos = angleToVector((float)oldang);
+
+                x += new_pos.X * (float)speed * delta * 200;
+                y += new_pos.Y * (float)speed * delta * 200;
+            }
+            if (kb.IsKeyDown(Keys.S) || kb.IsKeyDown(Keys.Down))
+            {
+                //deccell
+                if (speed > 0f)
+                    speed -= 0.07f;
+            }
+            if (kb.IsKeyDown(Keys.A) || kb.IsKeyDown(Keys.Left))
+            {
+                //turn counter clockwise
+                ang += -(float)MathHelper.ToRadians(7.0f);
+            }
+            if (kb.IsKeyDown(Keys.D) || kb.IsKeyDown(Keys.Right))
+            {
+                //turn clockwise
+                ang += (float)MathHelper.ToRadians(7.0f);
+            }
+
+            if (moved)
+            {
+                //xtra const movement, probably could be removed
+                Vector2 new_pos = angleToVector((float)ang);
+
+                x += new_pos.X * (float)speed * delta * 200;
+                y += new_pos.Y * (float)speed * delta * 200;
+            }
+
+            if (kb.IsKeyDown(Keys.Space))
+                Console.WriteLine(speed);
+
+        }
+
 
         public void draw(SpriteBatch pen)
         {

@@ -26,8 +26,8 @@ namespace SpaceGame
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.SynchronizeWithVerticalRetrace = false;
-            IsFixedTimeStep = false;
+            //graphics.SynchronizeWithVerticalRetrace = false;
+            //IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
         }
 
@@ -86,12 +86,13 @@ namespace SpaceGame
             p1.update(gameTime);
             // TODO: Add your update logic here
 
+            /*
             if (gameTime.TotalGameTime.TotalSeconds == 1)
             {
                 Console.WriteLine(ticks);
             } else
                 ticks++;
-
+                */
             m_camera.Location = p1.player_pos;
             base.Update(gameTime);
         }
