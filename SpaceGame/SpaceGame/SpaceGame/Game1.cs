@@ -135,15 +135,12 @@ namespace SpaceGame
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-<<<<<<< HEAD
             p1.update(gameTime, Content);
-=======
-            p1.update(gameTime);
           
->>>>>>> 379bd3f9c6347063b159cc7dc4d94938aad6e055
+
             // TODO: Add your update logic here
 
-<<<<<<< HEAD
+
             /*
             if (gameTime.TotalGameTime.TotalSeconds == 1)
             {
@@ -151,8 +148,7 @@ namespace SpaceGame
             } else
                 ticks++;
                 */
-=======
->>>>>>> 00963cebe96f40327d2a7181176d628a6d70074b
+
             m_camera.Location = p1.player_pos;
             base.Update(gameTime);
         }
@@ -168,10 +164,8 @@ namespace SpaceGame
             // TODO: Add your drawing code here
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
-<<<<<<< HEAD
+
             p1.draw(spriteBatch, gameTime);
-=======
-            p1.draw(spriteBatch);
 
             if (!drawCall)
             {
@@ -185,7 +179,7 @@ namespace SpaceGame
             }
             drawCall = true;
 
->>>>>>> 379bd3f9c6347063b159cc7dc4d94938aad6e055
+
             hub.Draw(spriteBatch);
             spriteBatch.End();
 

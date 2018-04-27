@@ -64,20 +64,20 @@ namespace SpaceGame
         {
             texture = man.Load<Texture2D>("Player");
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
-<<<<<<< HEAD
+
             player_pos = new Vector2(x, y);
             //Console.WriteLine(rateOfFire);
-=======
+
             player_pos = new Vector2((int)x, (int)y);
->>>>>>> 00963cebe96f40327d2a7181176d628a6d70074b
+
         }
 
         public void update(GameTime gameTime, ContentManager c)
         {
-<<<<<<< HEAD
-            if (!controller(gameTime))
+
+            if (!controller(gameTime, c))
             {
-                keyboard(gameTime);
+                keyboard(gameTime, c);
             }
             else
             {
@@ -87,14 +87,10 @@ namespace SpaceGame
 
             player_pos.X = x;
             player_pos.Y = y;
-=======
-            controller(gameTime, c);
 
-            player_pos.X = (int)x;
-            player_pos.Y = (int)y;
+
             foreach (Missile missile in missiles)
                 missile.Update(gameTime);
->>>>>>> 00963cebe96f40327d2a7181176d628a6d70074b
         }
 
         Vector2 angleToVector(float angle)
@@ -104,44 +100,13 @@ namespace SpaceGame
 
         float timer = 0;
 
-<<<<<<< HEAD
-        public bool controller(GameTime gameTime)
-=======
-        public void controller(GameTime gameTime, ContentManager c)
->>>>>>> 00963cebe96f40327d2a7181176d628a6d70074b
+
+        public bool controller(GameTime gameTime, ContentManager c)
         {
             
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             GamePadState pad = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
-            
-            if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
-            {
-                ang = (float)MathHelper.ToDegrees((float)ang);
-
-
-
-                ang = MathHelper.ToDegrees((float)Math.Atan2(pad.ThumbSticks.Right.X, pad.ThumbSticks.Right.Y));
-                if (ang < 0)
-                    ang += 360;
-                if (ang == 0)
-                    ang = 0;
-
-
-                Vector2 new_pos = angleToVector(MathHelper.ToRadians((float)ang));
-
-                x += new_pos.X * delta * 200;
-                y += new_pos.Y * delta * 200;
-
-                oldang = ang;
-                ang = (float)MathHelper.ToRadians((float)ang);
-                return true;
-            }
-            else
-            {
-                //ang = (float)MathHelper.ToRadians((float)oldang);
-                return false;
-            }
 
             // TODO: Make the time better.
             if (pad.IsButtonDown(Buttons.RightTrigger))
@@ -158,12 +123,38 @@ namespace SpaceGame
                     timer = 0;   //Reset Timer
                 }
             }
-            
-            return false;
+
+            if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
+            {
+                ang = (float)MathHelper.ToDegrees((float)ang);
+
+
+
+                ang = MathHelper.ToDegrees((float)Math.Atan2(pad.ThumbSticks.Right.X, pad.ThumbSticks.Right.Y));
+                if (ang < 0)
+                    ang += 360;
+                if (ang == 0)
+                    ang = 0;
+
+
+                Vector2 new_pos = angleToVector(MathHelper.ToRadians((float)ang));
+
+                x += new_pos.X * (float)topSpeed * delta * 200;
+                y += new_pos.Y * (float)topSpeed * delta * 200;
+
+                oldang = ang;
+                ang = (float)MathHelper.ToRadians((float)ang);
+                return true;
+            }
+            else
+            {
+                //ang = (float)MathHelper.ToRadians((float)oldang);
+                return false;
+            }
     }
 
-<<<<<<< HEAD
-        public void keyboard(GameTime gameTime)
+
+        public void keyboard(GameTime gameTime, ContentManager c)
         {
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -176,6 +167,21 @@ namespace SpaceGame
 
             if (speed > topSpeed)
                 speed = topSpeed;
+            //SHOOTING
+            if (kb.IsKeyDown(Keys.Space))
+            {
+                //Vector2 missile_pos = angleToVector(MathHelper.ToRadians((float)ang));
+
+                float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                timer += elapsed;
+                if (timer > 250)
+                {
+                    //Timer expired, execute action
+                    missiles.Add(new Missile(c, player_pos, ang, origin));
+
+                    timer = 0;   //Reset Timer
+                }
+            }
 
             if (kb.IsKeyDown(Keys.W) || kb.IsKeyDown(Keys.Up))
             {
@@ -219,17 +225,11 @@ namespace SpaceGame
                 x += new_pos.X * (float)speed * delta * 200;
                 y += new_pos.Y * (float)speed * delta * 200;
             }
-
-            if (kb.IsKeyDown(Keys.Space))
-                Console.WriteLine(speed);
-
         }
 
 
-        public void draw(SpriteBatch pen)
-=======
+        
         public void draw(SpriteBatch pen, GameTime gameTime)
->>>>>>> 00963cebe96f40327d2a7181176d628a6d70074b
         {
             pen.Draw(texture, player_pos, null, Color.White, (float)ang, origin, 1.0f, SpriteEffects.None, 0f);
             foreach (Missile missile in missiles)
