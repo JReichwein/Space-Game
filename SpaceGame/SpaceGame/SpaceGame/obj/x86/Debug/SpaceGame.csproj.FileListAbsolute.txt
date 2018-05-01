@@ -19,3 +19,24 @@ C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\S
 C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.exe
 C:\Users\189811\Desktop\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.pdb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Asteroid1.xnb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Hub Radius.xnb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Hub.xnb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Missile.xnb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Player.xnb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\SpaceGame.exe
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\SpaceGame.pdb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.dll
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Game.dll
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.dll
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.dll
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.dll
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.xml
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Game.xml
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.xml
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.xml
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.xml
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.csprojResolveAssemblyReference.cache
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.exe
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.pdb
