@@ -67,7 +67,7 @@ namespace SpaceGame
 
         public void DrawMenu(SpriteBatch spriteBatch, SpriteFont menuFont, Camera2D camera)
         {
-            if(menuOpened)
+            if(menuColor.A != 0)
             {
                 Rectangle bounds = camera.getBounds();
                 int camX = (int)(camera.Location.X - camera.getBounds().X / 2);
