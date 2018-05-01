@@ -137,14 +137,8 @@ namespace SpaceGame
             if (pad.Buttons.Back == ButtonState.Pressed || kB.IsKeyDown(Keys.Escape))
                 this.Exit();
 
-<<<<<<< HEAD
             p1.update(gameTime, Content, hub.isInHub());
             hub.Update(gameTime, pad, p1);
-=======
-            p1.update(gameTime, Content);
-          
-
->>>>>>> 94dee15cf79d751d2bf5bb77b36654e519ebc556
             // TODO: Add your update logic here
 
 
@@ -171,10 +165,7 @@ namespace SpaceGame
             // TODO: Add your drawing code here
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
-<<<<<<< HEAD
-=======
 
->>>>>>> 94dee15cf79d751d2bf5bb77b36654e519ebc556
             p1.draw(spriteBatch, gameTime);
 
             if (!drawCall)
@@ -189,18 +180,12 @@ namespace SpaceGame
             }
             drawCall = true;
 
-<<<<<<< HEAD
             if (hub.isOnCamera(m_camera))
             {
                 hub.Draw(spriteBatch);
                 if (hub.isWithinRadius(p1.getRectangle()))
                     hub.DrawMenu(spriteBatch, menuFont, m_camera);
             }
-=======
-
-            hub.Draw(spriteBatch);
-            spriteBatch.End();
->>>>>>> 94dee15cf79d751d2bf5bb77b36654e519ebc556
 
             spriteBatch.End();
 

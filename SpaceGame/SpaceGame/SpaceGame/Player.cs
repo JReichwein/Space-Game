@@ -74,11 +74,8 @@ namespace SpaceGame
 
         public void update(GameTime gameTime, ContentManager c, bool inHub)
         {
-<<<<<<< HEAD
             if(!inHub)
                 controller(gameTime, c);
-=======
->>>>>>> 94dee15cf79d751d2bf5bb77b36654e519ebc556
 
             if (!controller(gameTime, c))
             {
