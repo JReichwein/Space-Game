@@ -65,9 +65,10 @@ namespace SpaceGame
             player_pos = new Vector2((int)x, (int)y);
         }
 
-        public void update(GameTime gameTime, ContentManager c)
+        public void update(GameTime gameTime, ContentManager c, bool inHub)
         {
-            controller(gameTime, c);
+            if(!inHub)
+                controller(gameTime, c);
 
             player_pos.X = (int)x;
             player_pos.Y = (int)y;
@@ -134,6 +135,11 @@ namespace SpaceGame
             pen.Draw(texture, player_pos, null, Color.White, (float)ang, origin, 1.0f, SpriteEffects.None, 0f);
             foreach (Missile missile in missiles)
                 missile.Draw(pen, gameTime);
+        }
+
+        public Rectangle getRectangle()
+        {
+            return new Rectangle((int)player_pos.X, (int)player_pos.Y, texture.Width, texture.Height);
         }
     }
 }

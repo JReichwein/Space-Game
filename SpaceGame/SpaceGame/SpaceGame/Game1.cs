@@ -19,6 +19,7 @@ namespace SpaceGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont menuFont;
 
         Player p1;
         Hub hub;
@@ -110,6 +111,7 @@ namespace SpaceGame
             mp.generate();
             drawing.Start();
             rock = Content.Load<Texture2D>("Asteroid1");
+            menuFont = Content.Load<SpriteFont>("MenuFont");
             // TODO: use this.Content to load your game content here
         }
 
@@ -129,18 +131,14 @@ namespace SpaceGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState kB = Keyboard.GetState();
+            GamePadState pad = GamePad.GetState(PlayerIndex.One);
 
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (pad.Buttons.Back == ButtonState.Pressed || kB.IsKeyDown(Keys.Escape))
                 this.Exit();
 
-<<<<<<< HEAD
-            p1.update(gameTime, Content);
-=======
-            p1.update(gameTime);
-          
->>>>>>> 379bd3f9c6347063b159cc7dc4d94938aad6e055
+            p1.update(gameTime, Content, hub.isInHub());
+            hub.Update(gameTime, pad, p1);
             // TODO: Add your update logic here
 
             m_camera.Location = p1.player_pos;
@@ -158,10 +156,7 @@ namespace SpaceGame
             // TODO: Add your drawing code here
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
-<<<<<<< HEAD
             p1.draw(spriteBatch, gameTime);
-=======
-            p1.draw(spriteBatch);
 
             if (!drawCall)
             {
@@ -175,10 +170,14 @@ namespace SpaceGame
             }
             drawCall = true;
 
->>>>>>> 379bd3f9c6347063b159cc7dc4d94938aad6e055
-            hub.Draw(spriteBatch);
-            spriteBatch.End();
+            if (hub.isOnCamera(m_camera))
+            {
+                hub.Draw(spriteBatch);
+                if (hub.isWithinRadius(p1.getRectangle()))
+                    hub.DrawMenu(spriteBatch, menuFont, m_camera);
+            }
 
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
