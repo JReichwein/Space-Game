@@ -75,7 +75,7 @@ namespace SpaceGame
         public void update(GameTime gameTime, ContentManager c, bool inHub)
         {
             if(!inHub)
-                controller(gameTime, c);
+              controller(gameTime, c);
 
             player_pos.X = x;
             player_pos.Y = y;
