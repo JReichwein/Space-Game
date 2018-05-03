@@ -40,3 +40,6 @@ C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\
 C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.exe
 C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\obj\x86\Debug\SpaceGame.pdb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\HubBackground.xnb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Button.xnb
+C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\MenuFont.xnb

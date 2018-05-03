@@ -3,3 +3,6 @@ Content\Hub Radius.xnb
 Content\Hub.xnb
 Content\Missile.xnb
 Content\Player.xnb
+Content\HubBackground.xnb
+Content\Button.xnb
+Content\MenuFont.xnb
