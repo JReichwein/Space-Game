@@ -29,17 +29,18 @@ namespace SpaceGame
         ThreadStart update;
         Thread drawing;
         List<Rectangle> draw;
+        List<Asteroid> asteroids;
         bool drawCall = false;
 
         public static int MAX_RENDER_DISTANCE = 500;
 
         public Game1()
         {
+            this.IsMouseVisible = true;
             graphics = new GraphicsDeviceManager(this);
             //graphics.SynchronizeWithVerticalRetrace = false;
             //IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
         }
 
         void drawRocks()
@@ -53,7 +54,8 @@ namespace SpaceGame
                         Vector2 rect = new Vector2(i * 50, y * 50);
                         if (Vector2.Distance(p1.player_pos, rect) <= MAX_RENDER_DISTANCE)
                         {
-                            draw.Add(new Rectangle(i * 50, y * 50, 20, 20));
+                            //draw.Add(new Rectangle(i * 50, y * 50, 20, 20));
+                            asteroids.Add(new Asteroid(this.Content, new Vector2(i * 50, y * 50)));
                         }
                     }
 
@@ -94,6 +96,7 @@ namespace SpaceGame
             m_camera.Zoom = 1;
             update = new ThreadStart(update_);
             draw = new List<Rectangle>();
+            asteroids = new List<Asteroid>();
             drawing = new Thread(update_);
             base.Initialize();
         }
@@ -140,16 +143,16 @@ namespace SpaceGame
 
             p1.update(gameTime, Content, hub.isInHub());
             hub.Update(gameTime, pad, p1, m_camera, Content, menuFont);
-            // TODO: Add your update logic here
 
+            // Check if player touches an asteroid in order to start mining
+            foreach (Asteroid asteroid in asteroids) {
+                if (p1.getRectangle().Intersects(asteroid.Rectangle))
+                {
+                    Console.WriteLine("Mine Asteroid");
+                    //asteroid.startMining();
+                }
+            }
 
-            /*
-            if (gameTime.TotalGameTime.TotalSeconds == 1)
-            {
-                Console.WriteLine(ticks);
-            } else
-                ticks++;
-                */
 
             m_camera.Location = p1.player_pos;
             base.Update(gameTime);
@@ -174,15 +177,13 @@ namespace SpaceGame
 
             p1.draw(spriteBatch, gameTime);
 
-            if (!drawCall)
+            //for (int i = 0; i < draw.Count; i+=0)
+            for (int i = 0; i < asteroids.Count; i += 0)
             {
-                for (int i = 0; i < draw.Count; i++)
-                {
-
-                    spriteBatch.Draw(rock, draw[i], Color.LightPink);
-                    draw.RemoveAt(i);
-                    i--;
-                }
+                //spriteBatch.Draw(rock, draw[i], Color.LightPink);
+                asteroids[i].Draw(gameTime, spriteBatch);
+                //draw.RemoveAt(i);
+                asteroids.RemoveAt(i);
             }
             drawCall = true;
 

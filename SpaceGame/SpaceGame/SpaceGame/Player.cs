@@ -66,7 +66,6 @@ namespace SpaceGame
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
 
             player_pos = new Vector2(x, y);
-            //Console.WriteLine(rateOfFire);
 
             player_pos = new Vector2((int)x, (int)y);
 
@@ -74,14 +73,16 @@ namespace SpaceGame
 
         public void update(GameTime gameTime, ContentManager c, bool inHub)
         {
-            if(!inHub)
+            if (!inHub)
                 controller(gameTime, c);
 
             player_pos.X = x;
             player_pos.Y = y;
 
             foreach (Missile missile in missiles)
+            {
                 missile.Update(gameTime);
+            }
         }
 
         Vector2 angleToVector(float angle)
@@ -94,7 +95,7 @@ namespace SpaceGame
 
         public bool controller(GameTime gameTime, ContentManager c)
         {
-            
+
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             GamePadState pad = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular);
@@ -102,13 +103,10 @@ namespace SpaceGame
             // TODO: Make the time better.
             if (pad.IsButtonDown(Buttons.RightTrigger))
             {
-                //Vector2 missile_pos = angleToVector(MathHelper.ToRadians((float)ang));
-
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 timer += elapsed;
                 if (timer > rateOfFire)
                 {
-                    //Timer expired, execute action
                     missiles.Add(new Missile(c, player_pos, ang, origin));
 
                     timer = 0;   //Reset Timer
@@ -139,10 +137,9 @@ namespace SpaceGame
             }
             else
             {
-                //ang = (float)MathHelper.ToRadians((float)oldang);
                 return false;
             }
-    }
+        }
 
 
         public void keyboard(GameTime gameTime, ContentManager c)
@@ -161,8 +158,6 @@ namespace SpaceGame
             //SHOOTING
             if (kb.IsKeyDown(Keys.Space))
             {
-                //Vector2 missile_pos = angleToVector(MathHelper.ToRadians((float)ang));
-
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 timer += elapsed;
                 if (timer > rateOfFire)
@@ -219,7 +214,7 @@ namespace SpaceGame
         }
 
 
-        
+
         public void draw(SpriteBatch pen, GameTime gameTime)
         {
             pen.Draw(texture, player_pos, null, Color.White, (float)ang, origin, 1.0f, SpriteEffects.None, 0f);
@@ -230,6 +225,14 @@ namespace SpaceGame
         public Rectangle getRectangle()
         {
             return new Rectangle((int)player_pos.X, (int)player_pos.Y, texture.Width, texture.Height);
+        }
+
+        public List<Missile> Missiles
+        {
+            get
+            {
+                return missiles;
+            }
         }
     }
 }

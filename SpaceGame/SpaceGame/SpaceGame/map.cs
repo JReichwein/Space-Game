@@ -9,8 +9,7 @@ namespace SpaceGame
     {
         public string[,] world;
         double[,] world_int;
-        double space_perctange = .30;
-        double astroid_perctange = .40;
+        double astroid_perctange = .25;
         public int len = 0;
 
         public map(int len)
@@ -72,22 +71,25 @@ namespace SpaceGame
             make_map();
             beautify();
 
+            int rockCount = 0;
+
             for (int i = 0; i < len; i++)
             {
                 for (int y = 0; y < len; y++)
                 {
-                    if (world_int[i, y] < .75)
-                    {
-                        world[i, y] = "E";
-                    }
-                    else if (world_int[i, y] < .9)
+                    if (world_int[i, y] <= astroid_perctange)
                     {
                         world[i, y] = "R";
+                        rockCount++;
+                    }
+                    else
+                    {
+                        world[i, y] = "E";
                     }
                 }
             }
 
-
+            Console.WriteLine("Rocks: " + rockCount);
         }
     }
 

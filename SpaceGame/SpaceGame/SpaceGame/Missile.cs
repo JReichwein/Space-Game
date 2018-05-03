@@ -33,8 +33,8 @@ namespace SpaceGame
 
         public void Update(GameTime gameTime)
         {
-            posX += 5 * Math.Sin(heading);
-            posY += 5 * -Math.Cos(heading);
+            posX += 32 * Math.Sin(heading);
+            posY += 32 * -Math.Cos(heading);
             missileCenter = new Vector2((int)posX + missileRect.Width / 2,
                                         (int)posY + missileRect.Height / 2);
         }
@@ -57,6 +57,14 @@ namespace SpaceGame
             get
             {
                 return missileCenter;
+            }
+        }
+
+        public Rectangle Rectangle
+        {
+            get
+            {
+                return missileRect;
             }
         }
     }
