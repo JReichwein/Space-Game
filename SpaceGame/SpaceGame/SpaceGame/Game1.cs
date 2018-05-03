@@ -39,6 +39,7 @@ namespace SpaceGame
             //graphics.SynchronizeWithVerticalRetrace = false;
             //IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
         }
 
         void drawRocks()
@@ -138,7 +139,7 @@ namespace SpaceGame
                 this.Exit();
 
             p1.update(gameTime, Content, hub.isInHub());
-            hub.Update(gameTime, pad, p1);
+            hub.Update(gameTime, pad, p1, m_camera, Content, menuFont);
             // TODO: Add your update logic here
 
 
@@ -166,6 +167,11 @@ namespace SpaceGame
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
 
+            if (hub.isOnCamera(m_camera))
+            {
+                hub.Draw(spriteBatch);
+            }
+
             p1.draw(spriteBatch, gameTime);
 
             if (!drawCall)
@@ -182,7 +188,7 @@ namespace SpaceGame
 
             if (hub.isOnCamera(m_camera))
             {
-                hub.Draw(spriteBatch);
+                hub.DrawRadius(spriteBatch);
                 if (hub.isWithinRadius(p1.getRectangle()))
                     hub.DrawMenu(spriteBatch, menuFont, m_camera);
             }

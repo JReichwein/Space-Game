@@ -77,19 +77,8 @@ namespace SpaceGame
             if(!inHub)
                 controller(gameTime, c);
 
-            if (!controller(gameTime, c))
-            {
-                keyboard(gameTime, c);
-            }
-            else
-            {
-                
-            }
-
-
             player_pos.X = x;
             player_pos.Y = y;
-
 
             foreach (Missile missile in missiles)
                 missile.Update(gameTime);
