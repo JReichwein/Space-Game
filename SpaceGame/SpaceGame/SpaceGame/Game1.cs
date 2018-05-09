@@ -54,7 +54,6 @@ namespace SpaceGame
                         Vector2 rect = new Vector2(i * 50, y * 50);
                         if (Vector2.Distance(p1.player_pos, rect) <= MAX_RENDER_DISTANCE)
                         {
-                            //draw.Add(new Rectangle(i * 50, y * 50, 20, 20));
                             asteroids.Add(new Asteroid(this.Content, new Vector2(i * 50, y * 50)));
                         }
                     }
@@ -78,9 +77,8 @@ namespace SpaceGame
 
         protected override void OnExiting(Object sender, EventArgs args)
         {
-            base.OnExiting(sender, args);
-
             drawing.Abort();
+            base.OnExiting(sender, args);
         }
 
         /// <summary>
@@ -145,12 +143,34 @@ namespace SpaceGame
             hub.Update(gameTime, pad, p1, m_camera, Content, menuFont);
 
             // Check if player touches an asteroid in order to start mining
-            foreach (Asteroid asteroid in asteroids) {
-                if (p1.getRectangle().Intersects(asteroid.Rectangle))
+            for(int i=0; i<asteroids.Count; i++)
+            { 
+                if (asteroids[i].isWithinRadius(p1.getRectangle()) /*&& asteroid.isOnCamera(m_camera)*/)
                 {
-                    Console.WriteLine("Mine Asteroid");
-                    //asteroid.startMining();
-                }
+                    if (asteroids[i].IsMining)
+                    {
+                        if (asteroids[i].mine())
+                        {
+                            p1.Resources += asteroids[i].RawResources;
+                            Console.WriteLine("Raw Resources: " + p1.Resources);
+                            asteroids.RemoveAt(i);
+                            i--;
+                        }
+                    }
+                    else
+                    {
+                        if (pad.Buttons.A == ButtonState.Pressed)
+                        {
+                            asteroids[i].IsMining = true;
+                            asteroids[i].Hint = false;
+                        }
+                        else
+                        {
+                            asteroids[i].IsMining = false;
+                            asteroids[i].Hint = true;
+                        }
+                    }
+                } 
             }
 
 
@@ -181,7 +201,7 @@ namespace SpaceGame
             for (int i = 0; i < asteroids.Count; i += 0)
             {
                 //spriteBatch.Draw(rock, draw[i], Color.LightPink);
-                asteroids[i].Draw(gameTime, spriteBatch);
+                asteroids[i].Draw(gameTime, spriteBatch, p1);
                 //draw.RemoveAt(i);
                 asteroids.RemoveAt(i);
             }

@@ -59,6 +59,7 @@ namespace SpaceGame
         //Properties
         private double armor = 0.0;
         private int rateOfFire = 1000 / 2;
+        private int resources = 0;
 
         public Player(ContentManager man)
         {
@@ -68,7 +69,6 @@ namespace SpaceGame
             player_pos = new Vector2(x, y);
 
             player_pos = new Vector2((int)x, (int)y);
-
         }
 
         public void update(GameTime gameTime, ContentManager c, bool inHub)
@@ -232,6 +232,18 @@ namespace SpaceGame
             get
             {
                 return missiles;
+            }
+        }
+
+        public int Resources
+        {
+            get
+            {
+                return resources;
+            }
+            set
+            {
+                resources = value;
             }
         }
     }
