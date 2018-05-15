@@ -13,26 +13,39 @@ namespace SpaceGame
 {
     class HubButton
     {
-        private Rectangle buttonRect;
-        private Texture2D buttonText;
+        private Rectangle buttonRect, progressRect, progressBarRect;
+        private Texture2D buttonText, progressText, progressBarText;
         private Color buttonColor, textColor;
-        private String text;
+        private String text, type;
         private Vector2 textSize;
         private MouseState oldMouse;
         private SpriteFont buttonFont;
         private int requiredResources;
+        private double progressLength /* in percent, must be < 1 */, statMax;
 
-        public HubButton(Vector2 position, String text, ContentManager manager, int requiredResources)
+        public HubButton(Vector2 position, String text, ContentManager manager, Player p1)
         {
+            type = text.Substring(text.IndexOf(" ") + 1);
             buttonText = manager.Load<Texture2D>("Button");
+            progressText = manager.Load<Texture2D>("Progress");
+            progressBarText = manager.Load<Texture2D>("ProgressBar");
             buttonFont = manager.Load<SpriteFont>("ButtonFont");
-            this.text = text + " (" + requiredResources + ")";
+            statMax = chooseStatMax(p1);
+            progressLength = chooseBarLength(p1);
+            if (progressLength > 1)
+                progressLength = 1;
+            requiredResources = chooseRequiredResources();
+            if (requiredResources != 0)
+                this.text = text + " (" + requiredResources + ")";
+            else
+                this.text = text + " (UNAVAILABLE)";
             textSize = new Vector2((int)(buttonFont.MeasureString(this.text).X), (int)(buttonFont.MeasureString(this.text).Y));
             buttonRect = new Rectangle((int)position.X - (int)textSize.X / 2 - 18, (int)position.Y - (int)textSize.Y / 2 - 7, (int)textSize.X + 36, (int)textSize.Y + 14);
+            progressBarRect = new Rectangle((int)position.X - 30, (int)position.Y + buttonRect.Height / 2, 60, 10);
+            progressRect = new Rectangle(progressBarRect.X + 1, progressBarRect.Y, (int)(progressBarRect.Width * progressLength), progressBarRect.Height);
             buttonColor = new Color(1, 1, 1, 0);
             textColor = Color.Black;
             oldMouse = Mouse.GetState();
-            this.requiredResources = requiredResources;
         }
 
         public void Update(GameTime gameTime, Camera2D camera, Color menuColor)
@@ -41,13 +54,9 @@ namespace SpaceGame
             Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
             mousePosition = Vector2.Transform(mousePosition, Matrix.Invert(camera.TransformMatrix()));
             
-            if (isTouchingButton(new Vector2(mousePosition.X, mousePosition.Y )))
+            if (isTouchingButton(mousePosition))
             {
                 buttonColor = Color.Red;
-                if(mouse.LeftButton == ButtonState.Released && oldMouse.LeftButton == ButtonState.Pressed)
-                {
-                    Console.Beep();
-                }
             }
             else
             {
@@ -68,7 +77,23 @@ namespace SpaceGame
             oldMouse = mouse;
         }
 
-        private bool isTouchingButton(Vector2 position)
+        public void updateBar(Player p1)
+        {
+            progressLength = chooseBarLength(p1);
+            if (progressLength > 1)
+                progressLength = 1;
+            progressRect = new Rectangle(progressBarRect.X + 1, progressBarRect.Y, (int)(progressBarRect.Width * progressLength), progressBarRect.Height);
+
+            requiredResources = chooseRequiredResources();
+            if (requiredResources != 0)
+                this.text = text.Substring(0, text.LastIndexOf(" ")) + " (" + requiredResources + ")";
+            else
+                this.text = text + " (UNAVAILABLE)";
+            textSize = new Vector2((int)(buttonFont.MeasureString(this.text).X), (int)(buttonFont.MeasureString(this.text).Y));
+            buttonRect = new Rectangle(buttonRect.X, buttonRect.Y, (int)textSize.X + 36, (int)textSize.Y + 14);
+        }
+
+        public bool isTouchingButton(Vector2 position)
         {
             // add 300 to the position of each component for proper detections.
             return new Rectangle((int)position.X, (int)position.Y, 1, 1).Intersects(buttonRect);
@@ -79,11 +104,107 @@ namespace SpaceGame
             MouseState mouse = Mouse.GetState();
             spriteBatch.Draw(buttonText, buttonRect, buttonColor);
             spriteBatch.DrawString(buttonFont, text, new Vector2(buttonRect.X + (buttonRect.Width - buttonFont.MeasureString(text).X) / 2, buttonRect.Y + (buttonRect.Height - buttonFont.MeasureString(text).Y) / 2), textColor);
+            spriteBatch.Draw(progressBarText, progressBarRect, new Color(buttonColor.R, buttonColor.R, buttonColor.R, buttonColor.A));
+            spriteBatch.Draw(progressText, progressRect, new Color(buttonColor.R, buttonColor.R, buttonColor.R, buttonColor.A));
         }
 
         public bool isButton(String name)
         {
             return name.Equals(text);
+        }
+
+        public string getType()
+        {
+            return type;
+        }
+
+        public int getRequiredResources()
+        {
+            return requiredResources;
+        }
+
+        public double getStatMax()
+        {
+            return statMax;
+        }
+
+        private double chooseStatMax(Player p1)
+        {
+            double max = 0;
+            if (type.Equals("SPEED"))
+            {
+                max = 2.4;
+            }
+            else if (type.Equals("ARMOR"))
+            {
+                max = 10;
+            }
+            else if (type.Equals("DAMAGE"))
+            {
+                max = 20;
+            }
+            else if (type.Equals("RATE OF FIRE"))
+            {
+                max = 250;
+            }
+            else if (type.Equals("STORAGE"))
+            {
+                max = 1000;
+            }
+            return max;
+        }
+
+        private double chooseBarLength(Player p1)
+        {
+            double length = 0.0;
+            if (type.Equals("SPEED"))
+            {
+                length = p1.getTopSpeed() / statMax;
+            }
+            else if (type.Equals("ARMOR"))
+            {
+                length = p1.getArmor() / statMax;
+            }
+            else if (type.Equals("DAMAGE"))
+            {
+                length = p1.getDamage() / statMax;
+            }
+            else if (type.Equals("RATE OF FIRE"))
+            {
+                length = statMax / p1.getRateOfFire();
+            }
+            else if (type.Equals("STORAGE"))
+            {
+                length = p1.getStorage() / statMax;
+            }
+            return length;
+        }
+
+        private int chooseRequiredResources()
+        {
+            if (progressLength == 1)
+                return 0;
+            if (type.Equals("SPEED"))
+            {
+                return (int)(50 + 500 * progressLength);
+            }
+            else if (type.Equals("ARMOR"))
+            {
+                return (int)(50 + 750 * progressLength);
+            }
+            else if (type.Equals("DAMAGE"))
+            {
+                return (int)(50 + 375 * progressLength);
+            }
+            else if (type.Equals("RATE OF FIRE"))
+            {
+                return (int)(50 + 400 * progressLength);
+            }
+            else if (type.Equals("STORAGE"))
+            {
+                return (int)(50 + 425 * progressLength);
+            }
+            return -1;
         }
     };
 
@@ -97,6 +218,7 @@ namespace SpaceGame
         private string[] enterPrompt;
         private List<HubButton> buttons;
         private SpriteFont menuFont, smallMenuFont;
+        private MouseState oldMouse;
 
         public Hub(ContentManager manager)
         {
@@ -115,20 +237,22 @@ namespace SpaceGame
             buttons = new List<HubButton>();
             menuFont = manager.Load<SpriteFont>("MenuFont");
             smallMenuFont = manager.Load<SpriteFont>("SmallMenuFont");
-        }
+            oldMouse = Mouse.GetState();
+    }
 
         public void Update(GameTime gameTime, GamePadState pad, Player player, Camera2D camera, ContentManager manager, Player p1)
         {
+
             if (isWithinRadius(player.getRectangle()) && pad.Buttons.X == ButtonState.Pressed && !menuOpened)
             {
                 menuOpened = true;
                 Rectangle bounds = camera.getBounds();
                 Vector2 center = new Vector2(camera.Location.X, camera.Location.Y);
-                buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y - camera.getBounds().Height / 3.5)), "UPGRADE SPEED", manager, 0));
-                buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y - camera.getBounds().Height / 7)), "UPGRADE ARMOR", manager, 0));
-                buttons.Add(new HubButton(new Vector2(center.X, center.Y), "UPGRADE DAMAGE", manager, 0));
-                buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y + camera.getBounds().Height / 7)), "UPGRADE RATE OF FIRE", manager, 0));
-                buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y + camera.getBounds().Height / 3.5)), "UPGRADE STORAGE", manager, 0));
+                buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y - camera.getBounds().Height / 3.5)), "UPGRADE SPEED", manager, p1));
+                buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y - camera.getBounds().Height / 7)), "UPGRADE ARMOR", manager, p1));
+                buttons.Add(new HubButton(new Vector2(center.X, center.Y), "UPGRADE DAMAGE", manager, p1));
+                buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y + camera.getBounds().Height / 7)), "UPGRADE RATE OF FIRE", manager, p1));
+                buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y + camera.getBounds().Height / 3.5)), "UPGRADE STORAGE", manager, p1));
             }
             else if (pad.Buttons.Y == ButtonState.Pressed && menuOpened && menuColor.A == 255)
             {
@@ -150,15 +274,72 @@ namespace SpaceGame
                 menuColor.A -= 5;
             }
 
-            if (pad.Buttons.B == ButtonState.Pressed && p1.getRawResources() > 0)
+            if(menuColor.A != 0)
             {
-                p1.setResources(p1.getRawResources() + p1.getResources());
-                p1.setRawResources(0);
-            }
+                MouseState mouse = Mouse.GetState();
+                Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
+                mousePosition = Vector2.Transform(mousePosition, Matrix.Invert(camera.TransformMatrix()));
 
-            foreach(HubButton button in buttons)
-            {
-                button.Update(gameTime, camera, menuColor);
+                if (pad.Buttons.B == ButtonState.Pressed && p1.getRawResources() > 0)
+                {
+                    p1.setResources(p1.getRawResources() + p1.getResources());
+                    p1.setRawResources(0);
+                }
+
+                foreach (HubButton button in buttons)
+                {
+                    button.Update(gameTime, camera, menuColor);
+
+                    if (menuOpened)
+                    {
+                        if (button.isTouchingButton(mousePosition) && mouse.LeftButton == ButtonState.Pressed && !(oldMouse.LeftButton == ButtonState.Pressed))
+                        {
+                            if (button.getRequiredResources() <= p1.getResources())
+                            {
+                                string type = button.getType();
+                                if (type.Equals("SPEED") && p1.getTopSpeed() < button.getStatMax())
+                                {
+                                    p1.setTopSpeed(p1.getTopSpeed() + 0.2);
+                                    p1.setResources(p1.getResources() - button.getRequiredResources());
+                                }
+                                else if (type.Equals("ARMOR") && p1.getArmor() < button.getStatMax())
+                                {
+                                    p1.setArmor(p1.getArmor() + 1.0);
+                                    p1.setResources(p1.getResources() - button.getRequiredResources());
+                                }
+                                else if (type.Equals("DAMAGE") && p1.getDamage() < button.getStatMax())
+                                {
+                                    p1.setDamage(p1.getDamage() + 1.0);
+                                    p1.setResources(p1.getResources() - button.getRequiredResources());
+                                }
+                                else if (type.Equals("RATE OF FIRE") && p1.getRateOfFire() > button.getStatMax())
+                                {
+                                    p1.setRateOfFire(p1.getRateOfFire() - 50);
+                                    p1.setResources(p1.getResources() - button.getRequiredResources());
+                                }
+                                else if (type.Equals("STORAGE") && p1.getStorage() < button.getStatMax())
+                                {
+                                    p1.setStorage(p1.getStorage() + 50);
+                                    p1.setResources(p1.getResources() - button.getRequiredResources());
+                                }
+                                else
+                                {
+                                    Console.Beep(1500, 200);
+                                    continue;
+                                }
+                                button.updateBar(p1);
+                                Console.Beep(3000, 100);
+                                Console.Beep(3000, 100);
+                            }
+                            else
+                            {
+                                Console.Beep(1500, 200);
+                            }
+                        }
+                    }
+                }
+
+                oldMouse = mouse;
             }
         }
 

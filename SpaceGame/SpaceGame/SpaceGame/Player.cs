@@ -57,6 +57,8 @@ namespace SpaceGame
         private double topSpeed = 1.2;
         private int resources = 0;
         private int rawResources = 0;
+        private int storage = 100;
+        private double damage = 1;
 
         //Properties
         private double armor = 0.0;
@@ -110,7 +112,7 @@ namespace SpaceGame
                 if (timer > rateOfFire)
                 {
                     //Timer expired, execute action
-                    missiles.Add(new Missile(c, player_pos, ang, origin));
+                    missiles.Add(new Missile(c, player_pos, ang, origin, (int)(topSpeed * (5.0/1.2))));
 
                     timer = 0;   //Reset Timer
                 }
@@ -179,7 +181,7 @@ namespace SpaceGame
                 if (timer > rateOfFire)
                 {
                     //Timer expired, execute action
-                    missiles.Add(new Missile(c, player_pos, ang, origin));
+                    missiles.Add(new Missile(c, player_pos, ang, origin, (int)(topSpeed * (5.0 / 1.2))));
 
                     timer = 0;   //Reset Timer
                 }
@@ -261,6 +263,56 @@ namespace SpaceGame
         public void setRawResources(int newResources)
         {
             rawResources = newResources;
+        }
+
+        public double getTopSpeed()
+        {
+            return topSpeed;
+        }
+
+        public void setTopSpeed(double speed)
+        {
+            topSpeed = speed;
+        }
+
+        public double getArmor()
+        {
+            return armor;
+        }
+
+        public void setArmor(double armor)
+        {
+            this.armor = armor;
+        }
+
+        public double getDamage()
+        {
+            return damage;
+        }
+
+        public void setDamage(double damage)
+        {
+            this.damage = damage;
+        }
+
+        public int getRateOfFire()
+        {
+            return rateOfFire;
+        }
+
+        public void setRateOfFire(int rOF)
+        {
+            rateOfFire = rOF;
+        }
+
+        public int getStorage()
+        {
+            return storage;
+        }
+
+        public void setStorage(int storage)
+        {
+            this.storage = storage;
         }
     }
 }
