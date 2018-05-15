@@ -144,8 +144,8 @@ namespace SpaceGame
                 this.Exit();
 
             p1.update(gameTime, Content, hub.isInHub());
-
             hub.Update(gameTime, pad, p1, m_camera, Content, menuFont);
+
             // TODO: Add your update logic here
 
 
@@ -199,7 +199,7 @@ namespace SpaceGame
             {
                 hub.DrawRadius(spriteBatch);
                 if (hub.isWithinRadius(p1.getRectangle()))
-                    hub.DrawMenu(spriteBatch, m_camera, p1.getResources(), p1.getRawResources());
+                    hub.DrawMenu(spriteBatch, menuFont, m_camera);
             }
 
             spriteBatch.End();

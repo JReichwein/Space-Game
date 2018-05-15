@@ -47,21 +47,15 @@ namespace SpaceGame
 
         private Texture2D texture;
         public Vector2 player_pos;
-
         private float x = 300;
         private float y = 300;
         public double ang = 0;
-
         private Vector2 origin;
         private double vel = 1.2;
         private double oldang = 0;
         private double speed = 0.0;
         private double topSpeed = 1.2;
-
         public bool isMoving = false;
-        private int resources = 0;
-        private int rawResources = 0;
-
 
         //Properties
         private double armor = 0.0;
@@ -76,6 +70,7 @@ namespace SpaceGame
             //Console.WriteLine(rateOfFire);
 
             player_pos = new Vector2((int)x, (int)y);
+
         }
 
         public void update(GameTime gameTime, ContentManager c, bool inHub)
@@ -121,16 +116,6 @@ namespace SpaceGame
                 }
             }
 
-            // Debug Commands
-            if (pad.DPad.Up == ButtonState.Pressed)
-                resources++;
-            if (pad.DPad.Down == ButtonState.Pressed)
-                resources--;
-            if (pad.DPad.Right == ButtonState.Pressed)
-                rawResources++;
-            if (pad.DPad.Left == ButtonState.Pressed)
-                rawResources--;
-
             if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
             {
                 isMoving = true;
@@ -160,7 +145,7 @@ namespace SpaceGame
                 //ang = (float)MathHelper.ToRadians((float)oldang);
                 return false;
             }
-        }
+    }
 
 
         public void keyboard(GameTime gameTime, ContentManager c)
@@ -253,26 +238,6 @@ namespace SpaceGame
         public Rectangle getRectangle()
         {
             return new Rectangle((int)player_pos.X, (int)player_pos.Y, texture.Width, texture.Height);
-        }
-
-        public int getResources()
-        {
-            return resources;
-        }
-
-        public void setResources(int newResources)
-        {
-            resources = newResources;
-        }
-
-        public int getRawResources()
-        {
-            return rawResources;
-        }
-
-        public void setRawResources(int newResources)
-        {
-            rawResources = newResources;
         }
     }
 }

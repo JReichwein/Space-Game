@@ -78,23 +78,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-
     <Compile Include="CoronaSDK_Bullets_5.png">
       <Name>CoronaSDK_Bullets_5</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    <Compile Include="ButtonFont.spritefont">
-      <Name>ButtonFont</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SmallMenuFont.spritefont">
-      <Name>SmallMenuFont</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
