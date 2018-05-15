@@ -24,6 +24,8 @@ namespace SpaceGame
         Player p1;
         Hub hub;
         Camera2D m_camera;
+        Background bg;
+        Texture2D backgroundtex;
         map mp;
         Texture2D rock;
         ThreadStart update;
@@ -40,6 +42,7 @@ namespace SpaceGame
             //IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            
         }
 
         void drawRocks()
@@ -113,6 +116,8 @@ namespace SpaceGame
             drawing.Start();
             rock = Content.Load<Texture2D>("Asteroid1");
             menuFont = Content.Load<SpriteFont>("MenuFont");
+            backgroundtex = Content.Load<Texture2D>("CoronaSDK_Bullets_5");
+            bg = new Background(backgroundtex, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height);
             // TODO: use this.Content to load your game content here
         }
 
@@ -139,10 +144,7 @@ namespace SpaceGame
                 this.Exit();
 
             p1.update(gameTime, Content, hub.isInHub());
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of 0ed45c7... Added Infinite Background with Parallaxing
             hub.Update(gameTime, pad, p1, m_camera, Content, menuFont);
             // TODO: Add your update logic here
 
@@ -156,6 +158,7 @@ namespace SpaceGame
                 */
 
             m_camera.Location = p1.player_pos;
+            bg.update(p1.getRectangle(), p1);
             base.Update(gameTime);
         }
 
@@ -170,6 +173,8 @@ namespace SpaceGame
             // TODO: Add your drawing code here
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
+
+            bg.draw(spriteBatch);
 
             if (hub.isOnCamera(m_camera))
             {
