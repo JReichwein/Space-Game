@@ -47,16 +47,21 @@ namespace SpaceGame
 
         private Texture2D texture;
         public Vector2 player_pos;
-        private float x = 0;
-        private float y = 0;
-        private double ang = 0;
+
+        private float x = 300;
+        private float y = 300;
+        public double ang = 0;
+
         private Vector2 origin;
         private double vel = 1.2;
         private double oldang = 0;
         private double speed = 0.0;
         private double topSpeed = 1.2;
+
+        public bool isMoving = false;
         private int resources = 0;
         private int rawResources = 0;
+
 
         //Properties
         private double armor = 0.0;
@@ -76,7 +81,7 @@ namespace SpaceGame
         public void update(GameTime gameTime, ContentManager c, bool inHub)
         {
             if(!inHub)
-                controller(gameTime, c);
+              controller(gameTime, c);
 
             player_pos.X = x;
             player_pos.Y = y;
@@ -128,6 +133,7 @@ namespace SpaceGame
 
             if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
             {
+                isMoving = true;
                 ang = (float)MathHelper.ToDegrees((float)ang);
 
 
@@ -150,6 +156,7 @@ namespace SpaceGame
             }
             else
             {
+                isMoving = false;
                 //ang = (float)MathHelper.ToRadians((float)oldang);
                 return false;
             }
@@ -163,6 +170,11 @@ namespace SpaceGame
             KeyboardState kb = Keyboard.GetState();
             oldang = ang;
             bool moved = false;
+
+            if (speed > 0.0f)
+                isMoving = true;
+            else
+                isMoving = false;
 
             if (speed < 0.0f)
                 speed = 0.0f;
