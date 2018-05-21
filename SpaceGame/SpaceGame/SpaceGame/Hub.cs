@@ -48,11 +48,9 @@ namespace SpaceGame
             oldMouse = Mouse.GetState();
         }
 
-        public void Update(GameTime gameTime, Camera2D camera, Color menuColor)
+        public void Update(GameTime gameTime)
         {
             MouseState mouse = Mouse.GetState();
-            Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
-            mousePosition = Vector2.Transform(mousePosition, Matrix.Invert(camera.TransformMatrix()));
             
             if (isTouchingButton(mousePosition))
             {
@@ -62,19 +60,6 @@ namespace SpaceGame
             {
                 buttonColor = Color.White;
             }
-
-            if (buttonColor.G > 0)
-            {
-                buttonColor = menuColor;
-            }
-            else
-            {
-                buttonColor.R = menuColor.R;
-                buttonColor.A = menuColor.A;
-            }
-            textColor.A = menuColor.A;
-
-            oldMouse = mouse;
         }
 
         public void updateBar(Player p1)
@@ -95,13 +80,12 @@ namespace SpaceGame
 
         public bool isTouchingButton(Vector2 position)
         {
-            // add 300 to the position of each component for proper detections.
-            return new Rectangle((int)position.X, (int)position.Y, 1, 1).Intersects(buttonRect);
+            return position.X >= buttonRect.X && position.X <= buttonRect.X + buttonRect.Width &&
+                position.Y >= buttonRect.Y && position.Y <= buttonRect.Y + buttonRect.Height;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, SpriteFont menuFont)
         {
-            MouseState mouse = Mouse.GetState();
             spriteBatch.Draw(buttonText, buttonRect, buttonColor);
             spriteBatch.DrawString(buttonFont, text, new Vector2(buttonRect.X + (buttonRect.Width - buttonFont.MeasureString(text).X) / 2, buttonRect.Y + (buttonRect.Height - buttonFont.MeasureString(text).Y) / 2), textColor);
             spriteBatch.Draw(progressBarText, progressBarRect, new Color(buttonColor.R, buttonColor.R, buttonColor.R, buttonColor.A));
@@ -238,9 +222,10 @@ namespace SpaceGame
             menuFont = manager.Load<SpriteFont>("MenuFont");
             smallMenuFont = manager.Load<SpriteFont>("SmallMenuFont");
             oldMouse = Mouse.GetState();
-    }
+        }
 
-        public void Update(GameTime gameTime, GamePadState pad, Player player, Camera2D camera, ContentManager manager, Player p1)
+    
+        public void Update(GameTime gameTime, GamePadState pad, Player player, Camera2D camera, ContentManager manager, SpriteFont menuFont)
         {
 
             if (isWithinRadius(player.getRectangle()) && pad.Buttons.X == ButtonState.Pressed && !menuOpened)
@@ -253,10 +238,13 @@ namespace SpaceGame
                 buttons.Add(new HubButton(new Vector2(center.X, center.Y), "UPGRADE DAMAGE", manager, p1));
                 buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y + camera.getBounds().Height / 7)), "UPGRADE RATE OF FIRE", manager, p1));
                 buttons.Add(new HubButton(new Vector2(center.X, (int)(center.Y + camera.getBounds().Height / 3.5)), "UPGRADE STORAGE", manager, p1));
+
             }
             else if (pad.Buttons.Y == ButtonState.Pressed && menuOpened && menuColor.A == 255)
             {
                 menuOpened = false;
+                buttons.Clear();
+                
             }
 
             if (menuOpened && menuColor.A != 255)
@@ -353,7 +341,7 @@ namespace SpaceGame
             spriteBatch.Draw(radiusText, hubRadius, null, radiusColor, 0f, radiusOrigin, SpriteEffects.None, 0f);
         }
         
-        public void DrawMenu(SpriteBatch spriteBatch, Camera2D camera, int resources, int rawResources)
+        public void DrawMenu(SpriteBatch spriteBatch, SpriteFont menuFont, Camera2D camera)
         {
             if(menuColor.A != 0)
             {
@@ -361,39 +349,15 @@ namespace SpaceGame
                 int camX = (int)(camera.Location.X - camera.getBounds().X / 2);
                 int camY = (int)(camera.Location.Y - camera.getBounds().Y / 2);
                 spriteBatch.Draw(backgroundText, new Rectangle(camX - bounds.Width / 2, camY - bounds.Height / 2, bounds.Width, bounds.Height), menuColor);
-                // Resource Count
-                spriteBatch.DrawString(menuFont, "Resources: " + resources, new Vector2(camX - menuFont.MeasureString("Resources: " + resources).X / 2 - 3, (int)(camY - bounds.Height / 2.5 - menuFont.MeasureString("Resources: " + resources).Y / 2)), new Color(0, 0, 0, menuColor.A));
-                spriteBatch.DrawString(menuFont, "Resources: " + resources, new Vector2(camX - menuFont.MeasureString("Resources: " + resources).X / 2 + 3, (int)(camY - bounds.Height / 2.5 - menuFont.MeasureString("Resources: " + resources).Y / 2)), new Color(0, 0, 0, menuColor.A));
-                spriteBatch.DrawString(menuFont, "Resources: " + resources, new Vector2(camX - menuFont.MeasureString("Resources: " + resources).X / 2, (int)(camY - bounds.Height / 2.5 - menuFont.MeasureString("Resources: " + resources).Y / 2) - 3), new Color(0, 0, 0, menuColor.A));
-                spriteBatch.DrawString(menuFont, "Resources: " + resources, new Vector2(camX - menuFont.MeasureString("Resources: " + resources).X / 2, (int)(camY - bounds.Height / 2.5 - menuFont.MeasureString("Resources: " + resources).Y / 2) + 3), new Color(0, 0, 0, menuColor.A));
-                spriteBatch.DrawString(menuFont, "Resources: " + resources, new Vector2(camX - menuFont.MeasureString("Resources: " + resources).X / 2, (int)(camY - bounds.Height / 2.5 - menuFont.MeasureString("Resources: " + resources).Y / 2)), new Color(0, 0, menuColor.B, menuColor.A));
-                // Raw Resource Count
-                spriteBatch.DrawString(menuFont, "Raw Resources: " + rawResources, new Vector2(camX - menuFont.MeasureString("Raw Resources: " + rawResources).X / 2 - 3, (int)(camY + bounds.Height / 2.5 - menuFont.MeasureString("Raw Resources: " + rawResources).Y / 2)), new Color(0, 0, 0, menuColor.A));
-                spriteBatch.DrawString(menuFont, "Raw Resources: " + rawResources, new Vector2(camX - menuFont.MeasureString("Raw Resources: " + rawResources).X / 2 + 3, (int)(camY + bounds.Height / 2.5 - menuFont.MeasureString("Raw Resources: " + rawResources).Y / 2)), new Color(0, 0, 0, menuColor.A));
-                spriteBatch.DrawString(menuFont, "Raw Resources: " + rawResources, new Vector2(camX - menuFont.MeasureString("Raw Resources: " + rawResources).X / 2, (int)(camY + bounds.Height / 2.5 - menuFont.MeasureString("Raw Resources: " + rawResources).Y / 2) - 3), new Color(0, 0, 0, menuColor.A));
-                spriteBatch.DrawString(menuFont, "Raw Resources: " + rawResources, new Vector2(camX - menuFont.MeasureString("Raw Resources: " + rawResources).X / 2, (int)(camY + bounds.Height / 2.5 - menuFont.MeasureString("Raw Resources: " + rawResources).Y / 2) + 3), new Color(0, 0, 0, menuColor.A));
-                spriteBatch.DrawString(menuFont, "Raw Resources: " + rawResources, new Vector2(camX - menuFont.MeasureString("Raw Resources: " + rawResources).X / 2, (int)(camY + bounds.Height / 2.5 - menuFont.MeasureString("Raw Resources: " + rawResources).Y / 2)), new Color(menuColor.R, menuColor.G, 0, menuColor.A));
-                // Conversion prompt
-                if (rawResources > 0)
+                foreach(HubButton button in buttons)
                 {
-                    spriteBatch.DrawString(smallMenuFont, "Press B to convert Raw Resources", new Vector2(camX - smallMenuFont.MeasureString("Press B to convert Raw Resources").X / 2 - 2, (int)(camY + bounds.Height / 2.15 - smallMenuFont.MeasureString("Press B to convert Raw Resources").Y / 2)), new Color(0, 0, 0, menuColor.A));
-                    spriteBatch.DrawString(smallMenuFont, "Press B to convert Raw Resources", new Vector2(camX - smallMenuFont.MeasureString("Press B to convert Raw Resources").X / 2 + 2, (int)(camY + bounds.Height / 2.15 - smallMenuFont.MeasureString("Press B to convert Raw Resources").Y / 2)), new Color(0, 0, 0, menuColor.A));
-                    spriteBatch.DrawString(smallMenuFont, "Press B to convert Raw Resources", new Vector2(camX - smallMenuFont.MeasureString("Press B to convert Raw Resources").X / 2, (int)(camY + bounds.Height / 2.15 - smallMenuFont.MeasureString("Press B to convert Raw Resources").Y / 2) - 2), new Color(0, 0, 0, menuColor.A));
-                    spriteBatch.DrawString(smallMenuFont, "Press B to convert Raw Resources", new Vector2(camX - smallMenuFont.MeasureString("Press B to convert Raw Resources").X / 2, (int)(camY + bounds.Height / 2.15 - smallMenuFont.MeasureString("Press B to convert Raw Resources").Y / 2) + 2), new Color(0, 0, 0, menuColor.A));
-                    spriteBatch.DrawString(smallMenuFont, "Press B to convert Raw Resources", new Vector2(camX - smallMenuFont.MeasureString("Press B to convert Raw Resources").X / 2, (int)(camY + bounds.Height / 2.15 - smallMenuFont.MeasureString("Press B to convert Raw Resources").Y / 2)), new Color(menuColor.R, 0, 0, menuColor.A));
-                }
-                //
-                foreach (HubButton button in buttons)
-                {
-                    button.Draw(spriteBatch);
+                    button.Draw(spriteBatch, menuFont);
                 }
             }
             else
             {
                 spriteBatch.DrawString(menuFont, enterPrompt[0], new Vector2(-menuFont.MeasureString(enterPrompt[0]).X / 2, -menuFont.MeasureString(enterPrompt[0]).Y / 2), Color.White);
             }
-            if(menuColor.A == 0 && buttons.Count != 0)
-                buttons.Clear();
         }
 
         public bool isWithinRadius(Rectangle playerRect)
