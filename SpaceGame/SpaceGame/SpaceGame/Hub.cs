@@ -17,7 +17,7 @@ namespace SpaceGame
         private Texture2D buttonText, progressText, progressBarText;
         private Color buttonColor, textColor;
         private String text, type;
-        private Vector2 textSize;
+        private Vector2 textSize, position;
         private MouseState oldMouse;
         private SpriteFont buttonFont;
         private int requiredResources;
@@ -32,6 +32,7 @@ namespace SpaceGame
             buttonFont = manager.Load<SpriteFont>("ButtonFont");
             statMax = chooseStatMax(p1);
             progressLength = chooseBarLength(p1);
+            this.position = position;
             if (progressLength > 1)
                 progressLength = 1;
             requiredResources = chooseRequiredResources();
@@ -88,9 +89,9 @@ namespace SpaceGame
             if (requiredResources != 0)
                 this.text = text.Substring(0, text.LastIndexOf(" ")) + " (" + requiredResources + ")";
             else
-                this.text = text + " (UNAVAILABLE)";
+                this.text = text.Substring(0, text.IndexOf(" ")) + " (UNAVAILABLE)";
             textSize = new Vector2((int)(buttonFont.MeasureString(this.text).X), (int)(buttonFont.MeasureString(this.text).Y));
-            buttonRect = new Rectangle(buttonRect.X, buttonRect.Y, (int)textSize.X + 36, (int)textSize.Y + 14);
+            buttonRect = new Rectangle((int)position.X - (int)textSize.X / 2 - 18, (int)position.Y - (int)textSize.Y / 2 - 7, (int)textSize.X + 36, (int)textSize.Y + 14);
         }
 
         public bool isTouchingButton(Vector2 position)
