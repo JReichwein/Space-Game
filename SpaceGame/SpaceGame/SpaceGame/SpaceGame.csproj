@@ -57,7 +57,6 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Background.cs" />
     <Compile Include="Hub.cs" />
     <Compile Include="map.cs" />
     <Compile Include="Missile.cs" />
