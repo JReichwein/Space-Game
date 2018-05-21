@@ -26,13 +26,14 @@ namespace SpaceGame
         Camera2D m_camera;
         map mp;
         Texture2D rock;
-        ThreadStart update;
+        //ThreadStart update;
         Thread drawing;
-        List<Rectangle> draw;
         List<Asteroid> asteroids;
         bool drawCall = false;
+        float timer = 0;
 
         public static int MAX_RENDER_DISTANCE = 500;
+        private readonly float RATE_OF_MINE = 1000;
 
         public Game1()
         {
@@ -43,7 +44,7 @@ namespace SpaceGame
             Content.RootDirectory = "Content";
         }
 
-        void drawRocks()
+        void doDraw()
         {
             for (int i = 0; i < mp.len; i++)
             {
@@ -52,15 +53,27 @@ namespace SpaceGame
                     if (mp.world[i, y] == "R")
                     {
                         Vector2 rect = new Vector2(i * 50, y * 50);
-                        if (Vector2.Distance(p1.player_pos, rect) <= MAX_RENDER_DISTANCE)
-                        {
-                            asteroids.Add(new Asteroid(this.Content, new Vector2(i * 50, y * 50)));
-                        }
+                        asteroids.Add(new Asteroid(rock, rect, menuFont));
                     }
 
                 }
             }
         }
+
+        void drawRocks()
+        {
+            for (int i = 0; i < asteroids.Count; i++)
+            {
+
+                if (Vector2.Distance(p1.player_pos, asteroids[i].Position) <= MAX_RENDER_DISTANCE)
+                {
+                    asteroids[i].shouldDraw = true;
+                }
+                else
+                    asteroids[i].shouldDraw = false;
+            }
+        }
+
 
 
         public void update_()
@@ -75,10 +88,12 @@ namespace SpaceGame
             }
         }
 
+
+
         protected override void OnExiting(Object sender, EventArgs args)
         {
-            drawing.Abort();
             base.OnExiting(sender, args);
+            drawing.Abort();
         }
 
         /// <summary>
@@ -92,10 +107,10 @@ namespace SpaceGame
             // TODO: Add your initialization logic here
             m_camera = new Camera2D(GraphicsDevice.Viewport);
             m_camera.Zoom = 1;
-            update = new ThreadStart(update_);
-            draw = new List<Rectangle>();
+            //update = new ThreadStart(update_);
             asteroids = new List<Asteroid>();
             drawing = new Thread(update_);
+
             base.Initialize();
         }
 
@@ -107,14 +122,17 @@ namespace SpaceGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            rock = Content.Load<Texture2D>("Asteroid1");
+            menuFont = Content.Load<SpriteFont>("MenuFont");
             p1 = new Player(Content);
             hub = new Hub(Content);
             mp = new map(100);
             mp.generate();
+            doDraw();
             drawing.Start();
-            rock = Content.Load<Texture2D>("Asteroid1");
-            menuFont = Content.Load<SpriteFont>("MenuFont");
             // TODO: use this.Content to load your game content here
+
+            //drawRocks();
         }
 
         /// <summary>
@@ -143,36 +161,33 @@ namespace SpaceGame
             hub.Update(gameTime, pad, p1, m_camera, Content, menuFont);
 
             // Check if player touches an asteroid in order to start mining
-            for(int i=0; i<asteroids.Count; i++)
-            { 
-                if (asteroids[i].isWithinRadius(p1.getRectangle()) /*&& asteroid.isOnCamera(m_camera)*/)
+            for (int i=0; i<asteroids.Count; i++)
+            {
+                if (asteroids[i].isWithinRadius(p1.getRectangle()))
                 {
-                    if (asteroids[i].IsMining)
+                    if (pad.Buttons.A == ButtonState.Pressed)
                     {
+                        // Mine
+                        asteroids[i].IsMining = true;
+                        asteroids[i].Hint = false;
                         if (asteroids[i].mine())
                         {
-                            p1.Resources += asteroids[i].RawResources;
-                            Console.WriteLine("Raw Resources: " + p1.Resources);
+                            p1.RawResources += asteroids[i].RawResources;
                             asteroids.RemoveAt(i);
                             i--;
+                        
                         }
                     }
                     else
                     {
-                        if (pad.Buttons.A == ButtonState.Pressed)
-                        {
-                            asteroids[i].IsMining = true;
-                            asteroids[i].Hint = false;
-                        }
-                        else
-                        {
-                            asteroids[i].IsMining = false;
-                            asteroids[i].Hint = true;
-                        }
+                        // Not mining
+                        asteroids[i].Hint = true;
                     }
-                } 
+                } else
+                {
+                    asteroids[i].Hint = false;
+                }
             }
-
 
             m_camera.Location = p1.player_pos;
             base.Update(gameTime);
@@ -196,14 +211,11 @@ namespace SpaceGame
             }
 
             p1.draw(spriteBatch, gameTime);
-
-            //for (int i = 0; i < draw.Count; i+=0)
-            for (int i = 0; i < asteroids.Count; i += 0)
+            
+            for (int i = 0; i < asteroids.Count; i ++)
             {
-                //spriteBatch.Draw(rock, draw[i], Color.LightPink);
-                asteroids[i].Draw(gameTime, spriteBatch, p1);
-                //draw.RemoveAt(i);
-                asteroids.RemoveAt(i);
+                if (asteroids[i] != null && asteroids[i].shouldDraw == true)
+                    asteroids[i].Draw(rock, gameTime, spriteBatch, p1);
             }
             drawCall = true;
 

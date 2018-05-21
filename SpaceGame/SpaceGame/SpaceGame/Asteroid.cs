@@ -14,46 +14,52 @@ namespace SpaceGame
 {
     class Asteroid
     {
-        private Texture2D texture;
-        public Vector2 position;
+        private Vector2 position;
         private Rectangle bounds;
 
         private bool isMining = false;
+        private bool mined = false;
         private bool showHint = false;
 
         private int rawResource = 10;
         private int difficulty = 10;
-        private int amountMineLeft = 100;
-        private int mineRadius = 100;
+        private int amountMineLeft = 1000;
 
         private Vector2 radiusOrigin;
         private Texture2D radiusText;
         private SpriteFont menuFont;
-        private Color radiusColor = new Color(0, 50, 0, 50);
 
-        private Rectangle hubRadius;
+        public bool shouldDraw = true;
+        //private Color radiusColor = new Color(0, 50, 0, 50);
+
+        private Rectangle asteroidRadius;
 
         string[] enterPrompt = new String[2] { "Press A to mine", "Press E to mine" };
 
-        public Asteroid(ContentManager c, Vector2 position)
+        public Asteroid(Texture2D texture, Vector2 position, SpriteFont menuFont)
         {
-            texture = c.Load<Texture2D>("Asteroid1");
             this.position = position;
             bounds = new Rectangle((int)position.X, (int)position.Y, 20, 20);
 
-            hubRadius = new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width * 2), (int)(texture.Height * 2));
+            asteroidRadius = new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width * 2), (int)(texture.Height * 2));
 
-            radiusText = c.Load<Texture2D>("Hub Radius");
-            radiusOrigin = new Vector2(radiusText.Width / 2, radiusText.Height / 2);
+            //radiusText = c.Load<Texture2D>("Hub Radius");
+            radiusOrigin = new Vector2(50);
 
-            menuFont = c.Load<SpriteFont>("MenuFont");
+            radiusText = null;
+
+            this.menuFont = menuFont;
+            texture = null;
         }
 
         public bool mine()
         {
+            Console.WriteLine();
+            Console.WriteLine("Mining Asteroid");
             amountMineLeft -= difficulty;
             Console.WriteLine("Mining: " + amountMineLeft);
-            return true;
+            Console.WriteLine("Done.");
+            return (amountMineLeft <= 0);
         }
 
         public void Update(GameTime gameTime)
@@ -61,10 +67,13 @@ namespace SpaceGame
 
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch sb, Player p)
+        public void Draw(Texture2D texture, GameTime gameTime, SpriteBatch sb, Player p)
         {
-            sb.Draw(texture, bounds, Color.LightPink);
-            sb.Draw(radiusText, hubRadius, null, radiusColor, 0f, radiusOrigin, SpriteEffects.None, 0f);
+            if (!mined)
+            {
+                sb.Draw(texture, bounds, Color.LightPink);
+                //sb.Draw(radiusText, hubRadius, null, radiusColor, 0f, radiusOrigin, SpriteEffects.None, 0f);
+            }
             if (showHint)
                 sb.DrawString(menuFont, enterPrompt[0], p.player_pos - new Vector2(menuFont.MeasureString(enterPrompt[0]).X / 2, (menuFont.MeasureString(enterPrompt[0]).Y / 2) - 100), Color.White);
         }
@@ -105,9 +114,25 @@ namespace SpaceGame
             }
         }
 
+        public bool Mined
+        {
+            set
+            {
+                mined = value;
+            }
+        }
+
+        public Vector2 Position
+        {
+            get
+            {
+                return position;
+            }
+        }
+
         public bool isWithinRadius(Rectangle playerRect)
         {
-            return playerRect.Intersects(hubRadius);
+            return playerRect.Intersects(asteroidRadius);
         }
 
         public bool isOnCamera(Camera2D camera)
@@ -115,8 +140,8 @@ namespace SpaceGame
             Rectangle bounds = camera.getBounds();
             int camX = (int)(camera.Location.X - camera.getBounds().X / 2);
             int camY = (int)(camera.Location.Y - camera.getBounds().Y / 2);
-            return camX <= hubRadius.X + hubRadius.Width && camX >= hubRadius.X - hubRadius.Width &&
-                camY <= hubRadius.Y + hubRadius.Height && camY >= hubRadius.Y - hubRadius.Height;
+            return camX <= asteroidRadius.X + asteroidRadius.Width && camX >= asteroidRadius.X - asteroidRadius.Width &&
+                camY <= asteroidRadius.Y + asteroidRadius.Height && camY >= asteroidRadius.Y - asteroidRadius.Height;
         }
     }
 }

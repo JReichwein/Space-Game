@@ -45,6 +45,9 @@ namespace SpaceGame
 
         public List<Missile> missiles = new List<Missile>();
 
+        // Debug
+        private SpriteFont menuFont;
+
         private Texture2D texture;
         public Vector2 player_pos;
         private float x = 300;
@@ -59,11 +62,12 @@ namespace SpaceGame
         //Properties
         private double armor = 0.0;
         private int rateOfFire = 1000 / 2;
-        private int resources = 0;
+        private int rawResources = 0, rp = 0;
 
         public Player(ContentManager man)
         {
             texture = man.Load<Texture2D>("Player");
+            menuFont = man.Load<SpriteFont>("MenuFont");
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
 
             player_pos = new Vector2(x, y);
@@ -220,6 +224,7 @@ namespace SpaceGame
             pen.Draw(texture, player_pos, null, Color.White, (float)ang, origin, 1.0f, SpriteEffects.None, 0f);
             foreach (Missile missile in missiles)
                 missile.Draw(pen, gameTime);
+            pen.DrawString(menuFont, "Raw Resources: " + RawResources, new Vector2(0), Color.White);
         }
 
         public Rectangle getRectangle()
@@ -235,15 +240,16 @@ namespace SpaceGame
             }
         }
 
-        public int Resources
+        public int RawResources
         {
             get
             {
-                return resources;
+                return rawResources;
             }
             set
             {
-                resources = value;
+                rawResources = value;
+                Console.WriteLine("Resources: " + rawResources);
             }
         }
     }
