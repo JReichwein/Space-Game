@@ -179,7 +179,6 @@ namespace SpaceGame
                 hub.Update(gameTime, pad, p1, m_camera, Content, p1);
                 // TODO: Add your update logic here
 
-
                 /*
                 if (gameTime.TotalGameTime.TotalSeconds == 1)
                 {

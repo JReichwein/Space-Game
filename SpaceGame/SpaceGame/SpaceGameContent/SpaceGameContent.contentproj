@@ -78,6 +78,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoronaSDK_Bullets_5.png">
+      <Name>CoronaSDK_Bullets_5</Name>
     <Compile Include="ButtonFont.spritefont">
       <Name>ButtonFont</Name>
       <Importer>FontDescriptionImporter</Importer>
