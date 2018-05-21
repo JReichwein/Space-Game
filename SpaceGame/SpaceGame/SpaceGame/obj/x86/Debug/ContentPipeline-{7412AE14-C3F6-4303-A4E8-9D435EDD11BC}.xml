@@ -46,33 +46,6 @@
       <Output>C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Player.xnb</Output>
       <Time>2018-04-16T10:13:55.4266875-05:00</Time>
     </Item>
-    <Item>
-      <Source>HubBackground.jpg</Source>
-      <Name>HubBackground</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\HubBackground.xnb</Output>
-      <Time>2018-05-03T08:36:33.0818029-05:00</Time>
-    </Item>
-    <Item>
-      <Source>Button.png</Source>
-      <Name>Button</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\Button.xnb</Output>
-      <Time>2018-05-03T08:54:33.6943247-05:00</Time>
-    </Item>
-    <Item>
-      <Source>MenuFont.spritefont</Source>
-      <Name>MenuFont</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\147256\Desktop\game stuff\Space-Game\SpaceGame\SpaceGame\SpaceGame\bin\x86\Debug\Content\MenuFont.xnb</Output>
-      <Time>2018-05-03T08:54:33.6963249-05:00</Time>
-    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{7412AE14-C3F6-4303-A4E8-9D435EDD11BC}</ContentProjectGUID>

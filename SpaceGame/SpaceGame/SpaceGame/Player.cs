@@ -56,6 +56,10 @@ namespace SpaceGame
         private double speed = 0.0;
         private double topSpeed = 1.2;
         public bool isMoving = false;
+        private int resources = 0;
+        private int rawResources = 0;
+        private int storage = 100;
+        private double damage = 1;
 
         //Properties
         private double armor = 0.0;
@@ -76,7 +80,7 @@ namespace SpaceGame
         public void update(GameTime gameTime, ContentManager c, bool inHub)
         {
             if(!inHub)
-              controller(gameTime, c);
+                controller(gameTime, c);
 
             player_pos.X = x;
             player_pos.Y = y;
@@ -110,7 +114,7 @@ namespace SpaceGame
                 if (timer > rateOfFire)
                 {
                     //Timer expired, execute action
-                    missiles.Add(new Missile(c, player_pos, ang, origin));
+                    missiles.Add(new Missile(c, player_pos, ang, origin, (int)(topSpeed * (5.0/1.2))));
 
                     timer = 0;   //Reset Timer
                 }
@@ -118,7 +122,6 @@ namespace SpaceGame
 
             if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
             {
-                isMoving = true;
                 ang = (float)MathHelper.ToDegrees((float)ang);
 
 
@@ -141,7 +144,6 @@ namespace SpaceGame
             }
             else
             {
-                isMoving = false;
                 //ang = (float)MathHelper.ToRadians((float)oldang);
                 return false;
             }
@@ -155,11 +157,6 @@ namespace SpaceGame
             KeyboardState kb = Keyboard.GetState();
             oldang = ang;
             bool moved = false;
-
-            if (speed > 0.0f)
-                isMoving = true;
-            else
-                isMoving = false;
 
             if (speed < 0.0f)
                 speed = 0.0f;
@@ -176,7 +173,7 @@ namespace SpaceGame
                 if (timer > rateOfFire)
                 {
                     //Timer expired, execute action
-                    missiles.Add(new Missile(c, player_pos, ang, origin));
+                    missiles.Add(new Missile(c, player_pos, ang, origin, (int)(topSpeed * (5.0 / 1.2))));
 
                     timer = 0;   //Reset Timer
                 }
@@ -238,6 +235,75 @@ namespace SpaceGame
         public Rectangle getRectangle()
         {
             return new Rectangle((int)player_pos.X, (int)player_pos.Y, texture.Width, texture.Height);
+        }
+        public int getResources()
+        {
+            return resources;
+        }
+
+        public void setResources(int newResources)
+        {
+            resources = newResources;
+        }
+
+        public int getRawResources()
+        {
+            return rawResources;
+        }
+
+        public void setRawResources(int newResources)
+        {
+            rawResources = newResources;
+        }
+
+        public double getTopSpeed()
+        {
+            return topSpeed;
+        }
+
+        public void setTopSpeed(double speed)
+        {
+            topSpeed = speed;
+        }
+
+        public double getArmor()
+        {
+            return armor;
+        }
+
+        public void setArmor(double armor)
+        {
+            this.armor = armor;
+        }
+
+        public double getDamage()
+        {
+            return damage;
+        }
+
+        public void setDamage(double damage)
+        {
+            this.damage = damage;
+        }
+
+        public int getRateOfFire()
+        {
+            return rateOfFire;
+        }
+
+        public void setRateOfFire(int rOF)
+        {
+            rateOfFire = rOF;
+        }
+
+        public int getStorage()
+        {
+            return storage;
+        }
+
+        public void setStorage(int storage)
+        {
+            this.storage = storage;
         }
     }
 }
