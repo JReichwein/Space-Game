@@ -132,6 +132,7 @@ namespace SpaceGame
 
             if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
             {
+                isMoving = true;
                 ang = (float)MathHelper.ToDegrees((float)ang);
 
 
@@ -155,6 +156,7 @@ namespace SpaceGame
             else
             {
                 //ang = (float)MathHelper.ToRadians((float)oldang);
+                isMoving = false;
                 return false;
             }
     }
@@ -168,8 +170,15 @@ namespace SpaceGame
             oldang = ang;
             bool moved = false;
 
-            if (speed < 0.0f)
+            if (speed <= 0.0f)
+            {
                 speed = 0.0f;
+                isMoving = false;
+            }
+            else
+            {
+                isMoving = true;
+            }
 
             if (speed > topSpeed)
                 speed = topSpeed;
