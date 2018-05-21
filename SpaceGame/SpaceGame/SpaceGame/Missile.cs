@@ -18,9 +18,8 @@ namespace SpaceGame
         Vector2 missileCenter;
         double heading;
         double posX, posY;
-        int speed;
 
-        public Missile(ContentManager c, Vector2 location, double heading, Vector2 origin, int speed)
+        public Missile(ContentManager c, Vector2 location, double heading, Vector2 origin)
         {
             ContentManager content = c;
             missileTex = content.Load<Texture2D>("Missile");
@@ -30,13 +29,12 @@ namespace SpaceGame
             missileCenter = new Vector2((float)posX + missileRect.Width,
                                         (float)posY + missileRect.Height);
             this.heading = heading;
-            this.speed = speed;
         }
 
         public void Update(GameTime gameTime)
         {
-            posX += speed * Math.Sin(heading);
-            posY += speed * -Math.Cos(heading);
+            posX += 32 * Math.Sin(heading);
+            posY += 32 * -Math.Cos(heading);
             missileCenter = new Vector2((int)posX + missileRect.Width / 2,
                                         (int)posY + missileRect.Height / 2);
         }
