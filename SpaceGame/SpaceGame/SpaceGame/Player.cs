@@ -47,8 +47,8 @@ namespace SpaceGame
 
         private Texture2D texture;
         public Vector2 player_pos;
-        private float x = 300;
-        private float y = 300;
+        private float x = 0;
+        private float y = 0;
         public double ang = 0;
         private Vector2 origin;
         private double vel = 1.2;
@@ -119,6 +119,16 @@ namespace SpaceGame
                     timer = 0;   //Reset Timer
                 }
             }
+
+            // Debug Commands
+            if (pad.DPad.Up == ButtonState.Pressed)
+                resources++;
+            if (pad.DPad.Down == ButtonState.Pressed)
+                resources--;
+            if (pad.DPad.Right == ButtonState.Pressed)
+                rawResources++;
+            if (pad.DPad.Left == ButtonState.Pressed)
+                rawResources--;
 
             if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
             {
