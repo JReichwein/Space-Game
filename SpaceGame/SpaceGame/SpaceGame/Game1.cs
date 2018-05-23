@@ -19,9 +19,10 @@ namespace SpaceGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteFont menuFont;
+        SpriteFont menuFont, titleFont;
 
         Player p1;
+        Background bgs;
         Hub hub;
         Camera2D m_camera;
         map mp;
@@ -29,8 +30,20 @@ namespace SpaceGame
         //ThreadStart update;
         Thread drawing;
         List<Asteroid> asteroids;
+        List<Rectangle> draw;
+        MouseState oldMouse = Mouse.GetState();
+        String[] mainMenuText;
+        Rectangle[] mainMenuButtons;
+        Color[] mainMenuColors;
+        Rectangle[] menuObjects;
+        Texture2D[] menuTextures;
+        Texture2D bgtext;
+        
         bool drawCall = false;
         float timer = 0;
+
+        enum GameState { MainMenu, Controls, Credits, Playing };
+        GameState state = GameState.MainMenu;
 
         public static int MAX_RENDER_DISTANCE = 500;
         private readonly float RATE_OF_MINE = 1000;
@@ -110,7 +123,8 @@ namespace SpaceGame
             //update = new ThreadStart(update_);
             asteroids = new List<Asteroid>();
             drawing = new Thread(update_);
-
+            mainMenuText = new String[4] { "Play", "Controls", "Credits", "Exit" };
+            mainMenuColors = new Color[4] { Color.White, Color.White, Color.White, Color.White };
             base.Initialize();
         }
 
@@ -130,9 +144,34 @@ namespace SpaceGame
             mp.generate();
             doDraw();
             drawing.Start();
-            // TODO: use this.Content to load your game content here
+            rock = Content.Load<Texture2D>("Asteroid1");
+            menuFont = Content.Load<SpriteFont>("MenuFont");
+            titleFont = Content.Load<SpriteFont>("TitleFont");
+            bgtext = Content.Load<Texture2D>("CoronaSDK_Bullets_5");
+            bgs = new Background(bgtext, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height);
+            mainMenuButtons = new Rectangle[4] {
+                new Rectangle ((int)-menuFont.MeasureString(mainMenuText[0]).X / 2, (int)-menuFont.MeasureString(mainMenuText[0]).Y * 2, (int)menuFont.MeasureString(mainMenuText[0]).X, (int)menuFont.MeasureString(mainMenuText[0]).Y),
+                new Rectangle((int)-menuFont.MeasureString(mainMenuText[1]).X / 2, (int)(-menuFont.MeasureString(mainMenuText[1]).Y * 1), (int)menuFont.MeasureString(mainMenuText[1]).X, (int)menuFont.MeasureString(mainMenuText[1]).Y),
+                new Rectangle((int)-menuFont.MeasureString(mainMenuText[2]).X / 2, 0, (int)menuFont.MeasureString(mainMenuText[2]).X, (int)menuFont.MeasureString(mainMenuText[2]).Y),
+                new Rectangle((int)-menuFont.MeasureString(mainMenuText[3]).X / 2, (int)menuFont.MeasureString(mainMenuText[3]).Y, (int)menuFont.MeasureString(mainMenuText[3]).X, (int)menuFont.MeasureString(mainMenuText[3]).Y)
+            };
 
-            //drawRocks();
+            menuObjects = new Rectangle[] {
+                new Rectangle(-250, -22, 36, 44),
+                new Rectangle(175, -22, 36, 44),
+                new Rectangle(250, 125, rock.Width * 2, rock.Height * 2),
+                new Rectangle(-325, -200, rock.Width * 2, rock.Height * 2)
+            };
+
+            menuTextures = new Texture2D[] {
+                Content.Load<Texture2D>("Player"), // Player's Ship
+                Content.Load<Texture2D>("Enemy"), // Enemy's Ship
+                rock,
+                rock
+            };
+            //menuTextures[0] = Content.Load<Texture2D>(""); // Background
+            
+            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -151,45 +190,103 @@ namespace SpaceGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            KeyboardState kB = Keyboard.GetState();
-            GamePadState pad = GamePad.GetState(PlayerIndex.One);
-
-            if (pad.Buttons.Back == ButtonState.Pressed || kB.IsKeyDown(Keys.Escape))
-                this.Exit();
-
-            p1.update(gameTime, Content, hub.isInHub());
-            hub.Update(gameTime, pad, p1, m_camera, Content, menuFont);
-
-            // Check if player touches an asteroid in order to start mining
-            for (int i=0; i<asteroids.Count; i++)
+            if (state == GameState.Playing)
             {
-                if (asteroids[i].isWithinRadius(p1.getRectangle()))
-                {
-                    if (pad.Buttons.A == ButtonState.Pressed)
+                KeyboardState kB = Keyboard.GetState();
+                GamePadState pad = GamePad.GetState(PlayerIndex.One);
+
+                if (pad.Buttons.Back == ButtonState.Pressed || kB.IsKeyDown(Keys.Escape))
+                    this.Exit();
+
+                  // Check if player touches an asteroid in order to start mining
+                  for (int i=0; i<asteroids.Count; i++)
+                  {
+                    if (asteroids[i].isWithinRadius(p1.getRectangle()))
                     {
-                        // Mine
-                        asteroids[i].IsMining = true;
-                        asteroids[i].Hint = false;
-                        if (asteroids[i].mine())
+                        if (pad.Buttons.A == ButtonState.Pressed)
                         {
-                            p1.RawResources += asteroids[i].RawResources;
-                            asteroids.RemoveAt(i);
-                            i--;
-                        
+                            // Mine
+                            asteroids[i].IsMining = true;
+                            asteroids[i].Hint = false;
+                            if (asteroids[i].mine())
+                            {
+                                p1.RawResources += asteroids[i].RawResources;
+                                asteroids.RemoveAt(i);
+                                i--;
+
+                            }
+                        }
+                        else
+                        {
+                            // Not mining
+                            asteroids[i].Hint = true;
+                        }
+                    } else
+                    {
+                        asteroids[i].Hint = false;
+                    }
+                }
+                
+                p1.update(gameTime, Content, hub.isInHub());
+                hub.Update(gameTime, pad, p1, m_camera, Content, p1);
+                bgs.update(p1.getRectangle(), p1);
+                // TODO: Add your update logic here
+
+                /*
+                if (gameTime.TotalGameTime.TotalSeconds == 1)
+                {
+                    Console.WriteLine(ticks);
+                } else
+                    ticks++;
+                    */
+
+                m_camera.Location = p1.player_pos;
+            }
+            else if (state == GameState.MainMenu)
+            {
+                MouseState mouse = Mouse.GetState();
+                Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
+                mousePosition = Vector2.Transform(mousePosition, Matrix.Invert(m_camera.TransformMatrix()));
+
+                for(int i = 0; i < mainMenuButtons.Length; i++)
+                {
+                    if(mainMenuButtons[i].Intersects(new Rectangle((int)mousePosition.X, (int)mousePosition.Y, 1, 1)))
+                    {
+                        mainMenuColors[i] = Color.Red;
+                        if(mouse.LeftButton == ButtonState.Pressed && oldMouse.LeftButton != ButtonState.Pressed)
+                        {
+                            if (mainMenuText[i].Equals("Play"))
+                            {
+                                state = GameState.Playing;
+                            }
+                            else if (mainMenuText[i].Equals("Controls"))
+                            {
+                                //state = GameState.Controls; 
+                            }
+                            else if (mainMenuText[i].Equals("Credits"))
+                            {
+                                //state = GameState.Credits;
+                            }
+                            else if (mainMenuText[i].Equals("Exit"))
+                            {
+                                this.Exit();
+                            }
+                                
                         }
                     }
-                    else
-                    {
-                        // Not mining
-                        asteroids[i].Hint = true;
-                    }
-                } else
-                {
-                    asteroids[i].Hint = false;
+                    else if (mainMenuColors[i] != Color.White)
+                        mainMenuColors[i] = Color.White;
                 }
             }
+            else if (state == GameState.Controls)
+            {
 
-            m_camera.Location = p1.player_pos;
+            }
+            else if (state == GameState.Credits)
+            {
+
+            }
+
             base.Update(gameTime);
         }
 
@@ -205,25 +302,56 @@ namespace SpaceGame
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, m_camera.TransformMatrix());
 
-            if (hub.isOnCamera(m_camera))
+            if (state == GameState.Playing)
             {
-                hub.Draw(spriteBatch);
-            }
+                bgs.draw(spriteBatch);
+                if (hub.isOnCamera(m_camera))
+                {
+                    hub.Draw(spriteBatch);
+                }
 
-            p1.draw(spriteBatch, gameTime);
+                p1.draw(spriteBatch, gameTime);
             
-            for (int i = 0; i < asteroids.Count; i ++)
-            {
-                if (asteroids[i] != null && asteroids[i].shouldDraw == true)
-                    asteroids[i].Draw(rock, gameTime, spriteBatch, p1);
-            }
-            drawCall = true;
+                for (int i = 0; i < asteroids.Count; i ++)
+                {
+                    if (asteroids[i] != null && asteroids[i].shouldDraw == true)
+                        asteroids[i].Draw(rock, gameTime, spriteBatch, p1);
+                }
 
-            if (hub.isOnCamera(m_camera))
+                p1.draw(spriteBatch, gameTime);
+
+                if (!drawCall)
+                {
+                    for (int i = 0; i < draw.Count; i++)
+                    {
+                        spriteBatch.Draw(rock, draw[i], Color.LightPink);
+                        draw.RemoveAt(i);
+                        i--;
+                    }
+                }
+                drawCall = true;
+
+                if (hub.isOnCamera(m_camera))
+                {
+                    hub.DrawRadius(spriteBatch);
+                    if (hub.isWithinRadius(p1.getRectangle()))
+                        hub.DrawMenu(spriteBatch, m_camera, p1.getResources(), p1.getRawResources());
+                }
+            }
+            else if (state == GameState.MainMenu)
             {
-                hub.DrawRadius(spriteBatch);
-                if (hub.isWithinRadius(p1.getRectangle()))
-                    hub.DrawMenu(spriteBatch, menuFont, m_camera);
+                String title = "Space Game";
+                spriteBatch.DrawString(titleFont, title, new Vector2(-titleFont.MeasureString(title).X / 2, -titleFont.MeasureString(title).Y * 3), Color.Green);
+
+                for (int i = 0; i < mainMenuButtons.Length; i++)
+                {
+                    spriteBatch.DrawString(menuFont, mainMenuText[i], new Vector2(mainMenuButtons[i].X, mainMenuButtons[i].Y), mainMenuColors[i]);
+                }
+                
+                for (int i = 0; i < menuObjects.Length; i++)
+                {
+                   spriteBatch.Draw(menuTextures[i], menuObjects[i], Color.White);
+                }
             }
 
             spriteBatch.End();
