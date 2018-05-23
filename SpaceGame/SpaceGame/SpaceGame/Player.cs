@@ -40,7 +40,7 @@ namespace SpaceGame
         }
     };
 
-    class Player
+    class Player : Collidable
     {
 
         public List<Missile> missiles = new List<Missile>();
@@ -69,7 +69,7 @@ namespace SpaceGame
         private int rateOfFire = 1000 / 2;
         private int rp = 0;
 
-        public Player(ContentManager man)
+        public Player(ContentManager man) : base(new vec2(0, 0, 0, 0))
         {
             texture = man.Load<Texture2D>("Player");
             menuFont = man.Load<SpriteFont>("MenuFont");
@@ -78,6 +78,7 @@ namespace SpaceGame
             player_pos = new Vector2(x, y);
 
             player_pos = new Vector2((int)x, (int)y);
+            base.setRect(new vec2(player_pos.X, player_pos.Y, texture.Width, texture.Height));
         }
 
         public void update(GameTime gameTime, ContentManager c, bool inHub)

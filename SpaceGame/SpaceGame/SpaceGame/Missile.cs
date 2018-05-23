@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SpaceGame
 {
-    class Missile
+    class Missile : Collidable
     {
         Texture2D missileTex;
         Rectangle missileRect;
@@ -20,7 +20,7 @@ namespace SpaceGame
         double posX, posY;
         int speed;
 
-        public Missile(ContentManager c, Vector2 location, double heading, Vector2 origin, int speed)
+        public Missile(ContentManager c, Vector2 location, double heading, Vector2 origin, int speed) : base(new vec2(0,0,0,0))
         {
             ContentManager content = c;
             missileTex = content.Load<Texture2D>("Missile");
@@ -31,6 +31,7 @@ namespace SpaceGame
                                         (float)posY + missileRect.Height);
             this.heading = heading;
             this.speed = speed;
+            base.setRect(new vec2(missileRect.X, missileRect.Y, missileRect.Width, missileRect.Height));
         }
 
         public void Update(GameTime gameTime)

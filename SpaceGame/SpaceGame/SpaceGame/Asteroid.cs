@@ -34,7 +34,7 @@ namespace SpaceGame
 
         private Rectangle asteroidRadius;
 
-        string[] enterPrompt = new String[2] { "Press A to mine", "Press E to mine" };
+        string[] enterPrompt = new String[2] { "Hold A to mine", "Hold E to mine" };
 
         public Asteroid(Texture2D texture, Vector2 position, SpriteFont menuFont)
         {

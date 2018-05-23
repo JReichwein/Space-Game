@@ -31,6 +31,7 @@ namespace SpaceGame
         Thread drawing;
         List<Asteroid> asteroids;
         List<Rectangle> draw;
+        List<enemy> enemies;
         MouseState oldMouse = Mouse.GetState();
         String[] mainMenuText;
         Rectangle[] mainMenuButtons;
@@ -125,6 +126,7 @@ namespace SpaceGame
             drawing = new Thread(update_);
             mainMenuText = new String[4] { "Play", "Controls", "Credits", "Exit" };
             mainMenuColors = new Color[4] { Color.White, Color.White, Color.White, Color.White };
+            enemies = new List<enemy>();
             base.Initialize();
         }
 
@@ -212,10 +214,10 @@ namespace SpaceGame
                             asteroids[i].Hint = false;
                             if (asteroids[i].mine())
                             {
+                                enemies.Add(new enemy(Content, p1.getRectangle().X - 100, p1.getRectangle().Y - 100));
                                 p1.RawResources += asteroids[i].RawResources;
                                 asteroids.RemoveAt(i);
                                 i--;
-
                             }
                         }
                         else
@@ -232,6 +234,10 @@ namespace SpaceGame
                 p1.update(gameTime, Content, hub.isInHub());
                 hub.Update(gameTime, pad, p1, m_camera, Content, p1);
                 bgs.update(p1.getRectangle(), p1);
+                foreach (enemy e in enemies)
+                {
+                    e.update(new Vector2(p1.getRectangle().X, p1.getRectangle().Y), gameTime);
+                }
                 // TODO: Add your update logic here
 
                 /*
@@ -325,6 +331,11 @@ namespace SpaceGame
                     hub.DrawRadius(spriteBatch);
                     if (hub.isWithinRadius(p1.getRectangle()))
                         hub.DrawMenu(spriteBatch, m_camera, p1.getResources(), p1.getRawResources());
+                }
+
+                foreach (enemy e in enemies)
+                {
+                    e.draw(spriteBatch);
                 }
             }
             else if (state == GameState.MainMenu)
