@@ -27,8 +27,9 @@ namespace SpaceGame
         Camera2D m_camera;
         map mp;
         Texture2D rock;
-        ThreadStart update;
+        //ThreadStart update;
         Thread drawing;
+        List<Asteroid> asteroids;
         List<Rectangle> draw;
         MouseState oldMouse = Mouse.GetState();
         String[] mainMenuText;
@@ -37,24 +38,26 @@ namespace SpaceGame
         Rectangle[] menuObjects;
         Texture2D[] menuTextures;
         Texture2D bgtext;
-
+        
         bool drawCall = false;
+        float timer = 0;
 
         enum GameState { MainMenu, Controls, Credits, Playing };
         GameState state = GameState.MainMenu;
 
         public static int MAX_RENDER_DISTANCE = 500;
+        private readonly float RATE_OF_MINE = 1000;
 
         public Game1()
         {
+            this.IsMouseVisible = true;
             graphics = new GraphicsDeviceManager(this);
             //graphics.SynchronizeWithVerticalRetrace = false;
             //IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
         }
 
-        void drawRocks()
+        void doDraw()
         {
             for (int i = 0; i < mp.len; i++)
             {
@@ -63,15 +66,27 @@ namespace SpaceGame
                     if (mp.world[i, y] == "R")
                     {
                         Vector2 rect = new Vector2(i * 50, y * 50);
-                        if (Vector2.Distance(p1.player_pos, rect) <= MAX_RENDER_DISTANCE)
-                        {
-                            draw.Add(new Rectangle(i * 50, y * 50, 20, 20));
-                        }
+                        asteroids.Add(new Asteroid(rock, rect, menuFont));
                     }
 
                 }
             }
         }
+
+        void drawRocks()
+        {
+            for (int i = 0; i < asteroids.Count; i++)
+            {
+
+                if (Vector2.Distance(p1.player_pos, asteroids[i].Position) <= MAX_RENDER_DISTANCE)
+                {
+                    asteroids[i].shouldDraw = true;
+                }
+                else
+                    asteroids[i].shouldDraw = false;
+            }
+        }
+
 
 
         public void update_()
@@ -86,10 +101,11 @@ namespace SpaceGame
             }
         }
 
+
+
         protected override void OnExiting(Object sender, EventArgs args)
         {
             base.OnExiting(sender, args);
-
             drawing.Abort();
         }
 
@@ -104,8 +120,8 @@ namespace SpaceGame
             // TODO: Add your initialization logic here
             m_camera = new Camera2D(GraphicsDevice.Viewport);
             m_camera.Zoom = 1;
-            update = new ThreadStart(update_);
-            draw = new List<Rectangle>();
+            //update = new ThreadStart(update_);
+            asteroids = new List<Asteroid>();
             drawing = new Thread(update_);
             mainMenuText = new String[4] { "Play", "Controls", "Credits", "Exit" };
             mainMenuColors = new Color[4] { Color.White, Color.White, Color.White, Color.White };
@@ -120,10 +136,13 @@ namespace SpaceGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            rock = Content.Load<Texture2D>("Asteroid1");
+            menuFont = Content.Load<SpriteFont>("MenuFont");
             p1 = new Player(Content);
             hub = new Hub(Content);
             mp = new map(100);
             mp.generate();
+            doDraw();
             drawing.Start();
             rock = Content.Load<Texture2D>("Asteroid1");
             menuFont = Content.Load<SpriteFont>("MenuFont");
@@ -151,7 +170,7 @@ namespace SpaceGame
                 rock
             };
             //menuTextures[0] = Content.Load<Texture2D>(""); // Background
-
+            
             // TODO: use this.Content to load your game content here
         }
 
@@ -179,6 +198,35 @@ namespace SpaceGame
                 if (pad.Buttons.Back == ButtonState.Pressed || kB.IsKeyDown(Keys.Escape))
                     this.Exit();
 
+                  // Check if player touches an asteroid in order to start mining
+                  for (int i=0; i<asteroids.Count; i++)
+                  {
+                    if (asteroids[i].isWithinRadius(p1.getRectangle()))
+                    {
+                        if (pad.Buttons.A == ButtonState.Pressed)
+                        {
+                            // Mine
+                            asteroids[i].IsMining = true;
+                            asteroids[i].Hint = false;
+                            if (asteroids[i].mine())
+                            {
+                                p1.RawResources += asteroids[i].RawResources;
+                                asteroids.RemoveAt(i);
+                                i--;
+
+                            }
+                        }
+                        else
+                        {
+                            // Not mining
+                            asteroids[i].Hint = true;
+                        }
+                    } else
+                    {
+                        asteroids[i].Hint = false;
+                    }
+                }
+                
                 p1.update(gameTime, Content, hub.isInHub());
                 hub.Update(gameTime, pad, p1, m_camera, Content, p1);
                 bgs.update(p1.getRectangle(), p1);
@@ -263,12 +311,19 @@ namespace SpaceGame
                 }
 
                 p1.draw(spriteBatch, gameTime);
+            
+                for (int i = 0; i < asteroids.Count; i ++)
+                {
+                    if (asteroids[i] != null && asteroids[i].shouldDraw == true)
+                        asteroids[i].Draw(rock, gameTime, spriteBatch, p1);
+                }
+
+                p1.draw(spriteBatch, gameTime);
 
                 if (!drawCall)
                 {
                     for (int i = 0; i < draw.Count; i++)
                     {
-
                         spriteBatch.Draw(rock, draw[i], Color.LightPink);
                         draw.RemoveAt(i);
                         i--;

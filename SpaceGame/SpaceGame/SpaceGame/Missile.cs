@@ -61,5 +61,13 @@ namespace SpaceGame
                 return missileCenter;
             }
         }
+
+        public Rectangle Rectangle
+        {
+            get
+            {
+                return missileRect;
+            }
+        }
     }
 }
