@@ -67,7 +67,7 @@ namespace SpaceGame
         //Properties
         private double armor = 0.0;
         private int rateOfFire = 1000 / 2;
-        private int rawResources = 0, rp = 0;
+        private int rp = 0;
 
         public Player(ContentManager man)
         {
@@ -245,12 +245,14 @@ namespace SpaceGame
 
 
 
-        public void draw(SpriteBatch pen, GameTime gameTime)
+        public void draw(SpriteBatch pen, GameTime gameTime, Camera2D camera, SpriteFont smallMenuFont)
         {
             pen.Draw(texture, player_pos, null, Color.White, (float)ang, origin, 1.0f, SpriteEffects.None, 0f);
             foreach (Missile missile in missiles)
                 missile.Draw(pen, gameTime);
-            pen.DrawString(menuFont, "Raw Resources: " + RawResources, new Vector2(0), Color.White);
+            Rectangle bounds = camera.getBounds();
+            Vector2 center = new Vector2(camera.Location.X, camera.Location.Y);
+            pen.DrawString(smallMenuFont, "Raw Resources: " + RawResources, new Vector2(center.X - smallMenuFont.MeasureString("Raw Resources: " + RawResources).X / 2, (int)(center.Y - camera.getBounds().Height / 2)), Color.White);
         }
 
         public Rectangle getRectangle()

@@ -19,7 +19,7 @@ namespace SpaceGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteFont menuFont, titleFont;
+        SpriteFont menuFont, titleFont, smallMenuFont;
 
         Player p1;
         Background bgs;
@@ -169,6 +169,8 @@ namespace SpaceGame
                 rock,
                 rock
             };
+            smallMenuFont = Content.Load<SpriteFont>("SmallMenuFont");
+            Content.Load<Texture2D>("Missile");
             //menuTextures[0] = Content.Load<Texture2D>(""); // Background
             
             // TODO: use this.Content to load your game content here
@@ -309,8 +311,6 @@ namespace SpaceGame
                 {
                     hub.Draw(spriteBatch);
                 }
-
-                p1.draw(spriteBatch, gameTime);
             
                 for (int i = 0; i < asteroids.Count; i ++)
                 {
@@ -318,18 +318,7 @@ namespace SpaceGame
                         asteroids[i].Draw(rock, gameTime, spriteBatch, p1);
                 }
 
-                p1.draw(spriteBatch, gameTime);
-
-                if (!drawCall)
-                {
-                    for (int i = 0; i < draw.Count; i++)
-                    {
-                        spriteBatch.Draw(rock, draw[i], Color.LightPink);
-                        draw.RemoveAt(i);
-                        i--;
-                    }
-                }
-                drawCall = true;
+                p1.draw(spriteBatch, gameTime, m_camera, smallMenuFont);
 
                 if (hub.isOnCamera(m_camera))
                 {
