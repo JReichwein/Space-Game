@@ -23,6 +23,7 @@ namespace SpaceGame
 
         Player p1;
         Background bgs;
+        locationArrow arrow;
         Hub hub;
         Camera2D m_camera;
         map mp;
@@ -39,6 +40,7 @@ namespace SpaceGame
         Rectangle[] menuObjects;
         Texture2D[] menuTextures;
         Texture2D bgtext;
+        Texture2D arrowtext;
         
         bool drawCall = false;
         float timer = 0;
@@ -150,7 +152,9 @@ namespace SpaceGame
             menuFont = Content.Load<SpriteFont>("MenuFont");
             titleFont = Content.Load<SpriteFont>("TitleFont");
             bgtext = Content.Load<Texture2D>("CoronaSDK_Bullets_5");
+            arrowtext = Content.Load<Texture2D>("Picture2");
             bgs = new Background(bgtext, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height);
+            arrow = new locationArrow(arrowtext, Vector2.Zero);
             mainMenuButtons = new Rectangle[4] {
                 new Rectangle ((int)-menuFont.MeasureString(mainMenuText[0]).X / 2, (int)-menuFont.MeasureString(mainMenuText[0]).Y * 2, (int)menuFont.MeasureString(mainMenuText[0]).X, (int)menuFont.MeasureString(mainMenuText[0]).Y),
                 new Rectangle((int)-menuFont.MeasureString(mainMenuText[1]).X / 2, (int)(-menuFont.MeasureString(mainMenuText[1]).Y * 1), (int)menuFont.MeasureString(mainMenuText[1]).X, (int)menuFont.MeasureString(mainMenuText[1]).Y),
@@ -248,6 +252,8 @@ namespace SpaceGame
                     ticks++;
                     */
 
+                arrow.update(kB, m_camera.Location, new Vector2(p1.getRectangle().X, p1.getRectangle().Y));
+
                 m_camera.Location = p1.player_pos;
             }
             else if (state == GameState.MainMenu)
@@ -337,6 +343,7 @@ namespace SpaceGame
                 {
                     e.draw(spriteBatch);
                 }
+                arrow.draw(spriteBatch, smallMenuFont);
             }
             else if (state == GameState.MainMenu)
             {

@@ -62,6 +62,7 @@
     <Compile Include="Collidable.cs" />
     <Compile Include="enemy.cs" />
     <Compile Include="Hub.cs" />
+    <Compile Include="locationArrow.cs" />
     <Compile Include="map.cs" />
     <Compile Include="Missile.cs" />
     <Compile Include="Player.cs" />
