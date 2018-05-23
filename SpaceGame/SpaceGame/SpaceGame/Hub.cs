@@ -17,11 +17,11 @@ namespace SpaceGame
         private Texture2D buttonText, progressText, progressBarText;
         private Color buttonColor, textColor;
         private String text, type;
-        private Vector2 textSize;
+        private Vector2 textSize, position;
         private MouseState oldMouse;
         private SpriteFont buttonFont;
         private int requiredResources;
-        private double progressLength /* in percent, must be < 1 */, statMax;
+        private double progressLength /* in percent, must be < 1 */, statMin, statMax;
 
         public HubButton(Vector2 position, String text, ContentManager manager, Player p1)
         {
@@ -31,7 +31,9 @@ namespace SpaceGame
             progressBarText = manager.Load<Texture2D>("ProgressBar");
             buttonFont = manager.Load<SpriteFont>("ButtonFont");
             statMax = chooseStatMax(p1);
+            statMin = chooseStatMin(p1);
             progressLength = chooseBarLength(p1);
+            this.position = position;
             if (progressLength > 1)
                 progressLength = 1;
             requiredResources = chooseRequiredResources();
@@ -88,9 +90,9 @@ namespace SpaceGame
             if (requiredResources != 0)
                 this.text = text.Substring(0, text.LastIndexOf(" ")) + " (" + requiredResources + ")";
             else
-                this.text = text + " (UNAVAILABLE)";
+                this.text = text.Substring(0, text.IndexOf(" ")) + " (UNAVAILABLE)";
             textSize = new Vector2((int)(buttonFont.MeasureString(this.text).X), (int)(buttonFont.MeasureString(this.text).Y));
-            buttonRect = new Rectangle(buttonRect.X, buttonRect.Y, (int)textSize.X + 36, (int)textSize.Y + 14);
+            buttonRect = new Rectangle((int)position.X - (int)textSize.X / 2 - 18, (int)position.Y - (int)textSize.Y / 2 - 7, (int)textSize.X + 36, (int)textSize.Y + 14);
         }
 
         public bool isTouchingButton(Vector2 position)
@@ -154,28 +156,54 @@ namespace SpaceGame
             return max;
         }
 
+        private double chooseStatMin(Player p1)
+        {
+            double min = 0;
+            if (type.Equals("SPEED"))
+            {
+                min = 1.2;
+            }
+            else if (type.Equals("ARMOR"))
+            {
+                min = 0;
+            }
+            else if (type.Equals("DAMAGE"))
+            {
+                min = 1;
+            }
+            else if (type.Equals("RATE OF FIRE"))
+            {
+                min = 500;
+            }
+            else if (type.Equals("STORAGE"))
+            {
+                min = 100;
+            }
+            return min;
+        }
+
         private double chooseBarLength(Player p1)
         {
             double length = 0.0;
             if (type.Equals("SPEED"))
             {
-                length = p1.getTopSpeed() / statMax;
+                length = (p1.getTopSpeed() - statMin) / (statMax - statMin);
             }
             else if (type.Equals("ARMOR"))
             {
-                length = p1.getArmor() / statMax;
+                length = (p1.getArmor() - statMin) / (statMax - statMin);
             }
             else if (type.Equals("DAMAGE"))
             {
-                length = p1.getDamage() / statMax;
+                length = (p1.getDamage() - statMin) / (statMax - statMin);
             }
             else if (type.Equals("RATE OF FIRE"))
             {
-                length = statMax / p1.getRateOfFire();
+                length = (p1.getRateOfFire() - statMin) / (statMax - statMin);
             }
             else if (type.Equals("STORAGE"))
             {
-                length = p1.getStorage() / statMax;
+                length = (p1.getStorage() - statMin) / (statMax - statMin);
             }
             return length;
         }

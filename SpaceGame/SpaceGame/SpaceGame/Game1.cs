@@ -22,6 +22,7 @@ namespace SpaceGame
         SpriteFont menuFont, titleFont;
 
         Player p1;
+        Background bgs;
         Hub hub;
         Camera2D m_camera;
         map mp;
@@ -35,6 +36,7 @@ namespace SpaceGame
         Color[] mainMenuColors;
         Rectangle[] menuObjects;
         Texture2D[] menuTextures;
+        Texture2D bgtext;
 
         bool drawCall = false;
 
@@ -126,6 +128,8 @@ namespace SpaceGame
             rock = Content.Load<Texture2D>("Asteroid1");
             menuFont = Content.Load<SpriteFont>("MenuFont");
             titleFont = Content.Load<SpriteFont>("TitleFont");
+            bgtext = Content.Load<Texture2D>("CoronaSDK_Bullets_5");
+            bgs = new Background(bgtext, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height);
             mainMenuButtons = new Rectangle[4] {
                 new Rectangle ((int)-menuFont.MeasureString(mainMenuText[0]).X / 2, (int)-menuFont.MeasureString(mainMenuText[0]).Y * 2, (int)menuFont.MeasureString(mainMenuText[0]).X, (int)menuFont.MeasureString(mainMenuText[0]).Y),
                 new Rectangle((int)-menuFont.MeasureString(mainMenuText[1]).X / 2, (int)(-menuFont.MeasureString(mainMenuText[1]).Y * 1), (int)menuFont.MeasureString(mainMenuText[1]).X, (int)menuFont.MeasureString(mainMenuText[1]).Y),
@@ -177,6 +181,7 @@ namespace SpaceGame
 
                 p1.update(gameTime, Content, hub.isInHub());
                 hub.Update(gameTime, pad, p1, m_camera, Content, p1);
+                bgs.update(p1.getRectangle(), p1);
                 // TODO: Add your update logic here
 
                 /*
@@ -251,6 +256,7 @@ namespace SpaceGame
 
             if (state == GameState.Playing)
             {
+                bgs.draw(spriteBatch);
                 if (hub.isOnCamera(m_camera))
                 {
                     hub.Draw(spriteBatch);
