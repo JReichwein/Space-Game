@@ -39,6 +39,7 @@ namespace SpaceGame
 
             dist = (int)Vector2.Distance(localPos, new Vector2(0, 0));
 
+            /*
             if (keyboard.IsKeyDown(Keys.Right))
                 x++;
             if (keyboard.IsKeyDown(Keys.Left))
@@ -47,6 +48,7 @@ namespace SpaceGame
                 y++;
             if (keyboard.IsKeyDown(Keys.Up))
                 y--;
+            */
         }
         public void draw(SpriteBatch spriteBatch, SpriteFont font)
         {
