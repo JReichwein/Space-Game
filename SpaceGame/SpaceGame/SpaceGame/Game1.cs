@@ -57,6 +57,18 @@ namespace SpaceGame
 
         List<Rectangle> player_map = new List<Rectangle>();
 
+        string[,] mpp;
+
+        void make_map()
+        {
+            mpp = new string[500, 500];
+            for (int i = 0; i < asteroids.Count; i++)
+            {
+                mpp[250+(asteroids[i].Rectangle.X / 20), 250+(asteroids[i].Rectangle.Y / 20)] = "a";
+            }
+
+        }
+
         public Game1()
         {
             this.IsMouseVisible = true;
@@ -131,6 +143,10 @@ namespace SpaceGame
             mainMenuText = new String[4] { "Play", "Controls", "Credits", "Exit" };
             mainMenuColors = new Color[4] { Color.White, Color.White, Color.White, Color.White };
             enemies = new List<enemy>();
+
+
+            make_map();
+
             base.Initialize();
         }
 
@@ -179,9 +195,7 @@ namespace SpaceGame
             };
             smallMenuFont = Content.Load<SpriteFont>("SmallMenuFont");
             Content.Load<Texture2D>("Missile");
-            //menuTextures[0] = Content.Load<Texture2D>(""); // Background
-            
-            // TODO: use this.Content to load your game content here
+
         }
 
         /// <summary>
@@ -271,6 +285,8 @@ namespace SpaceGame
                 }
                 player_map.Clear();
                 m_camera.Location = p1.player_pos;
+
+
             }
             else if (state == GameState.MainMenu)
             {
