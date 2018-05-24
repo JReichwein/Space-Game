@@ -8,7 +8,7 @@ using System.Text;
 
 namespace SpaceGame
 {
-    class enemy : Collidable
+    class enemy 
     {
         float x;
         float y;
@@ -19,7 +19,7 @@ namespace SpaceGame
         int timer = 0;
 
 
-        List<Missile> missles;
+        Missile last;
         ContentManager man;
         GameTime time;
         Random rand = new Random();
@@ -27,12 +27,10 @@ namespace SpaceGame
         float health;
 
         SpriteFont font;
-       public bool dead = false;
+        public bool dead = false;
 
 
-        List<Collidable> missles_collidables;
-
-        public enemy(ContentManager man, float x, float y) : base(new vec2(0,0,0,0))
+        public enemy(ContentManager man, float x, float y) 
         {
             
             this.man = man;
@@ -44,13 +42,10 @@ namespace SpaceGame
             texture = man.Load<Texture2D>("player");
             font = man.Load<SpriteFont>("SmallMenuFont");
             center = new Vector2(texture.Width / 2, texture.Height / 2);
-            missles = new List<Missile>();
+            last = null;
             rand_speed = (float)rand.Next(50,200);
 
-            missles_collidables = new List<Collidable>();
 
-            base.setRect(new vec2(x,y,texture.Width, texture.Height));
-            base.setRef(this);
         }
 
         float lookAt(Vector2 p1)
@@ -77,39 +72,30 @@ namespace SpaceGame
 
         void shoot()
         {
-            missles.Add(new Missile(man, current_pos, angle, center, 4));
-            missles_collidables.Add(missles[missles.Count-1]);
+            last = new Missile(man, current_pos, angle, center, 4);
+            last.tag = "en";
         }
 
-        public void stopColision()
+        public Missile update(Vector2 p1, GameTime time, List<Asteroid> astroids, List<Missile> bullets)
         {
-            base.exitCollision();
-        }
 
-        public void update(Vector2 p1, GameTime time)
-        {
-            if (base.isColliding)
-                if (base.colliding is Missile)
+            for (int i = 0; i < bullets.Count; i++)
+                if (bullets[i].Rectangle.Intersects(new Rectangle((int)current_pos.X, (int)current_pos.Y, texture.Width, texture.Height)))
                 {
-                    Missile x = (Missile)base.colliding;
-                    Rectangle rec = new Rectangle((int)current_pos.X, (int)current_pos.Y, texture.Width, texture.Height);
-                    if (!x.getRect().Intersects(rec))
+                    if (bullets[i].tag == "player")
                     {
-                        base.exitCollision();
-                        x.exitCollision();
-                    }
-                    else
-                    { 
                         health--;
+                        bullets[i].collided = true;
                     }
                 }
 
             if (health == 0)
                 dead = true;
+            last = null;
 
             this.time = time;
             float distance = Vector2.Distance(p1, current_pos);
-            if (distance < 200)
+            if (distance < 200 && distance > 20)
             {
                 if (timer > 15)
                 {
@@ -119,23 +105,24 @@ namespace SpaceGame
                 lookAt(p1);
                 moveTo(p1);
             }
+            else if (distance < 200 && distance < 20)
+            {
+                if (timer > 15)
+                {
+                    timer = 0;
+                    shoot();
+                }
+            }
 
-
-
-            foreach (Missile missile in missles)
-                missile.Update(time);
 
             timer++;
-
-            base.setRect(new vec2(x, y, texture.Width, texture.Height));
+            return last;
         }
 
         public void draw(SpriteBatch pen)
         {
             pen.Draw(texture, current_pos, null, Color.White, angle, center, 1.0f, SpriteEffects.None, 0f);
             pen.DrawString(font, health + "", current_pos, Color.LightPink);
-            foreach (Missile missile in missles)
-                missile.Draw(pen, time);
         }
     }
 }

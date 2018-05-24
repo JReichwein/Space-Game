@@ -30,8 +30,12 @@ namespace SpaceGame
         Texture2D rock;
         //ThreadStart update;
         Thread drawing;
+
+
         List<Asteroid> asteroids;
         List<Rectangle> draw;
+        List<Missile> miss = new List<Missile>();
+
         List<enemy> enemies;
         MouseState oldMouse = Mouse.GetState();
         String[] mainMenuText;
@@ -50,6 +54,8 @@ namespace SpaceGame
 
         public static int MAX_RENDER_DISTANCE = 500;
         private readonly float RATE_OF_MINE = 1000;
+
+        List<Rectangle> player_map = new List<Rectangle>();
 
         public Game1()
         {
@@ -84,11 +90,15 @@ namespace SpaceGame
                 if (Vector2.Distance(p1.player_pos, asteroids[i].Position) <= MAX_RENDER_DISTANCE)
                 {
                     asteroids[i].shouldDraw = true;
+                    if(Vector2.Distance(p1.player_pos, asteroids[i].Position) <= 100)
+                        player_map.Add(new Rectangle((int)asteroids[i].Position.X, (int)asteroids[i].Position.Y, 20, 20));
                 }
                 else
                     asteroids[i].shouldDraw = false;
             }
         }
+
+
 
 
 
@@ -211,7 +221,7 @@ namespace SpaceGame
                   {
                     if (asteroids[i].isWithinRadius(p1.getRectangle()))
                     {
-                        if (pad.Buttons.A == ButtonState.Pressed)
+                        if (pad.Buttons.A == ButtonState.Pressed || kB.IsKeyDown(Keys.Space))
                         {
                             // Mine
                             asteroids[i].IsMining = true;
@@ -235,25 +245,39 @@ namespace SpaceGame
                     }
                 }
                 
-                p1.update(gameTime, Content, hub.isInHub());
+                Missile ret = p1.update(gameTime, Content, hub.isInHub(), player_map, miss);
+
+                if (ret != null)
+                    miss.Add(ret);
+
                 hub.Update(gameTime, pad, p1, m_camera, Content, p1);
                 bgs.update(p1.getRectangle(), p1);
-                foreach (enemy e in enemies)
+                for(int i=0; i<enemies.Count; i++)
                 {
-                    e.update(new Vector2(p1.getRectangle().X, p1.getRectangle().Y), gameTime);
-                }
-                // TODO: Add your update logic here
+                    ret = enemies[i].update(new Vector2(p1.getRectangle().X, p1.getRectangle().Y), gameTime, asteroids, miss);
+                    if (ret != null)
+                        miss.Add(ret);
 
-                /*
-                if (gameTime.TotalGameTime.TotalSeconds == 1)
-                {
-                    Console.WriteLine(ticks);
-                } else
-                    ticks++;
-                    */
+                    if (enemies[i].dead)
+                    {
+                        enemies.RemoveAt(i);
+                        i--;
+                    }
+                }
 
                 arrow.update(kB, m_camera.Location, new Vector2(p1.getRectangle().X, p1.getRectangle().Y));
 
+
+                for (int i = 0; i < miss.Count; i++)
+                {
+                    miss[i].Update();
+                    if (miss[i].collided)
+                    {
+                        miss.RemoveAt(i);
+                        i--;
+                    }
+                }
+                player_map.Clear();
                 m_camera.Location = p1.player_pos;
             }
             else if (state == GameState.MainMenu)
@@ -344,6 +368,11 @@ namespace SpaceGame
                     e.draw(spriteBatch);
                 }
                 arrow.draw(spriteBatch, smallMenuFont);
+
+                for (int i = 0; i < miss.Count; i++)
+                {
+                    miss[i].Draw(spriteBatch);
+                }
             }
             else if (state == GameState.MainMenu)
             {

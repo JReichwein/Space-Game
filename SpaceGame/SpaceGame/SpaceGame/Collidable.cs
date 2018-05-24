@@ -8,76 +8,20 @@ namespace SpaceGame
 {
     class Collidable
     {
+        public float x;
+        public float y;
+        public string tag;
 
-        public struct vec2
+        public Collidable(int x, int y, string tag)
         {
-            public float x;
-            public float y;
-            public int width;
-            public int height;
-
-            public vec2(float x, float y, int width, int height)
-            {
-                this.x = x;
-                this.y = y;
-                this.width = width;
-                this.height = height;
-            }
-        }
-
-
-
-        public bool isColliding;
-        vec2 rect;
-        public Object colliding;
-        public Object reference;
-
-
-        public Collidable(vec2 vec)
-        {
-            isColliding = false;
-            this.rect = vec;
-            
-        }
-
-        public void setRef(object x)
-        {
-            this.reference = x;
-        }
-
-
-        public void setRect(vec2 rect)
-        {
-            this.rect = rect;
+            this.x = x;
+            this.y = y;
+            this.tag = tag;
         }
 
         public Rectangle getRect()
         {
-            return new Rectangle((int)rect.x, (int)rect.y, rect.width, rect.height);
+            throw new NotImplementedException();
         }
-
-        public void exitCollision()
-        {
-            this.colliding = null;
-            this.isColliding = false;
-        }
-
-
-        public void onCollision(Collidable c)
-        {
-            if (getRect().Intersects(c.getRect()))
-            {
-                this.colliding = c.reference;
-                this.isColliding = true;
-
-                c.colliding = reference;
-                c.isColliding = true;
-
-
-                Console.WriteLine("collision");
-            }
-        }
-
-
     }
 }

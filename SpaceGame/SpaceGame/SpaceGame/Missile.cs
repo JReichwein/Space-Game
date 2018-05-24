@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SpaceGame
 {
-    class Missile : Collidable
+    class Missile 
     {
         Texture2D missileTex;
         Rectangle missileRect;
@@ -19,8 +19,11 @@ namespace SpaceGame
         double heading;
         double posX, posY;
         int speed;
+        public string tag;
+        public bool collided = false;
 
-        public Missile(ContentManager c, Vector2 location, double heading, Vector2 origin, int speed) : base(new vec2(0,0,0,0))
+
+        public Missile(ContentManager c, Vector2 location, double heading, Vector2 origin, int speed) 
         {
             ContentManager content = c;
             missileTex = content.Load<Texture2D>("Missile");
@@ -31,10 +34,10 @@ namespace SpaceGame
                                         (float)posY + missileRect.Height);
             this.heading = heading;
             this.speed = speed;
-            base.setRect(new vec2(missileRect.X, missileRect.Y, missileRect.Width, missileRect.Height));
+            this.tag = "";
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
             posX += speed * Math.Sin(heading);
             posY += speed * -Math.Cos(heading);
@@ -47,7 +50,7 @@ namespace SpaceGame
             return (float)Math.Atan2(angleVector.X, -angleVector.Y);
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(missileTex, missileCenter, null, Color.White,
                 (float)heading,
@@ -67,7 +70,7 @@ namespace SpaceGame
         {
             get
             {
-                return missileRect;
+                return new Rectangle((int)missileCenter.X, (int)missileCenter.Y, missileTex.Width, missileTex.Height);
             }
         }
     }

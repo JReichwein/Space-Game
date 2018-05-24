@@ -1,8 +1,16 @@
-Asteroid1.xnb
-Hub Radius.xnb
-Hub.xnb
-Missile.xnb
-Player.xnb
-HubBackground.xnb
-Button.xnb
-MenuFont.xnb
+Content\Asteroid1.xnb
+Content\Hub Radius.xnb
+Content\Hub.xnb
+Content\Missile.xnb
+Content\Player.xnb
+Content\HubBackground.xnb
+Content\Button.xnb
+Content\Progress.xnb
+Content\ProgressBar.xnb
+Content\Enemy.xnb
+Content\Picture2.xnb
+Content\MenuFont.xnb
+Content\ButtonFont.xnb
+Content\SmallMenuFont.xnb
+Content\TitleFont.xnb
+Content\CoronaSDK_Bullets_5.xnb

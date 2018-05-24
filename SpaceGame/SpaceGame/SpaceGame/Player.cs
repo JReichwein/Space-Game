@@ -40,10 +40,10 @@ namespace SpaceGame
         }
     };
 
-    class Player : Collidable
+    class Player
     {
 
-        public List<Missile> missiles = new List<Missile>();
+        Missile last;
 
         // Debug
         private SpriteFont menuFont;
@@ -54,7 +54,6 @@ namespace SpaceGame
         private float y = 0;
         public double ang = 0;
         private Vector2 origin;
-        private double vel = 1.2;
         private double oldang = 0;
         private double speed = 0.0;
         private double topSpeed = 1.2;
@@ -67,9 +66,10 @@ namespace SpaceGame
         //Properties
         private double armor = 0.0;
         private int rateOfFire = 1000 / 2;
-        private int rp = 0;
 
-        public Player(ContentManager man) : base(new vec2(0, 0, 0, 0))
+        public float health = 100;        
+
+        public Player(ContentManager man) 
         {
             texture = man.Load<Texture2D>("Player");
             menuFont = man.Load<SpriteFont>("MenuFont");
@@ -78,21 +78,32 @@ namespace SpaceGame
             player_pos = new Vector2(x, y);
 
             player_pos = new Vector2((int)x, (int)y);
-            base.setRect(new vec2(player_pos.X, player_pos.Y, texture.Width, texture.Height));
         }
 
-        public void update(GameTime gameTime, ContentManager c, bool inHub)
+        public Missile update(GameTime gameTime, ContentManager c, bool inHub, List<Rectangle> map, List<Missile> bullets)
         {
+            last = null;
+
+            for (int i = 0; i < bullets.Count; i++)
+                if (bullets[i].tag.Equals("en"))
+                {
+                    if (bullets[i].Rectangle.Intersects(new Rectangle((int)player_pos.X, (int)player_pos.Y, texture.Width, texture.Height)))
+                    {
+                        health -= .5f;
+                        bullets[i].collided = true;
+                    }
+                }
+
+
             if (!inHub)
-                controller(gameTime, c);
+                if (!controller(gameTime, c, map))
+                    keyboard(gameTime, c, map);
 
             player_pos.X = x;
             player_pos.Y = y;
 
-            foreach (Missile missile in missiles)
-            {
-                missile.Update(gameTime);
-            }
+            return last;
+
         }
 
         Vector2 angleToVector(float angle)
@@ -103,7 +114,7 @@ namespace SpaceGame
         float timer = 0;
 
 
-        public bool controller(GameTime gameTime, ContentManager c)
+        public bool controller(GameTime gameTime, ContentManager c, List<Rectangle> map)
         {
 
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -118,13 +129,14 @@ namespace SpaceGame
                 if (timer > rateOfFire)
                 {
                     //Timer expired, execute action
-                    missiles.Add(new Missile(c, player_pos, ang, origin, (int)(topSpeed * (5.0/1.2))));
+                    last = new Missile(c, player_pos, ang, origin, (int)(topSpeed * (5.0/1.2)));
 
                     timer = 0;   //Reset Timer
                 }
             }
 
             // Debug Commands
+            /*
             if (pad.DPad.Up == ButtonState.Pressed)
                 resources++;
             if (pad.DPad.Down == ButtonState.Pressed)
@@ -133,6 +145,7 @@ namespace SpaceGame
                 rawResources++;
             if (pad.DPad.Left == ButtonState.Pressed)
                 rawResources--;
+                */
 
             if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
             {
@@ -150,11 +163,25 @@ namespace SpaceGame
 
                 Vector2 new_pos = angleToVector(MathHelper.ToRadians((float)ang));
 
+                float oldX = x;
+                float oldY = y;
+
                 x += new_pos.X * (float)topSpeed * delta * 200;
                 y += new_pos.Y * (float)topSpeed * delta * 200;
 
                 oldang = ang;
                 ang = (float)MathHelper.ToRadians((float)ang);
+
+                for (int i = 0; i < map.Count; i++)
+                {
+                    Rectangle p = new Rectangle((int)x, (int)y, texture.Width, texture.Height);
+                    if (map[i].Intersects(p))
+                    {
+                        x = oldX;
+                        y = oldY;
+                    }
+                }
+
                 return true;
             }
             else
@@ -166,7 +193,7 @@ namespace SpaceGame
         }
 
 
-        public void keyboard(GameTime gameTime, ContentManager c)
+        public void keyboard(GameTime gameTime, ContentManager c, List<Rectangle> map)
         {
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -194,8 +221,8 @@ namespace SpaceGame
                 if (timer > rateOfFire)
                 {
                     //Timer expired, execute action
-                    missiles.Add(new Missile(c, player_pos, ang, origin, (int)(topSpeed * (5.0 / 1.2))));
-
+                    last = new Missile(c, player_pos, ang, origin, (int)(topSpeed * (5.0 / 1.2)));
+                    last.tag = "player";
                     timer = 0;   //Reset Timer
                 }
             }
@@ -214,8 +241,23 @@ namespace SpaceGame
                 //const movement
                 Vector2 new_pos = angleToVector((float)oldang);
 
+
+                float oldX = x;
+                float oldY = y;
+
                 x += new_pos.X * (float)speed * delta * 200;
                 y += new_pos.Y * (float)speed * delta * 200;
+
+                for (int i = 0; i < map.Count; i++)
+                {
+                    Rectangle p = new Rectangle((int)x, (int)y, texture.Width, texture.Height);
+                    if (map[i].Intersects(p))
+                    {
+                        x = oldX;
+                        y = oldY;
+                        speed = 0;
+                    }
+                }
             }
             if (kb.IsKeyDown(Keys.S) || kb.IsKeyDown(Keys.Down))
             {
@@ -239,8 +281,22 @@ namespace SpaceGame
                 //xtra const movement, probably could be removed
                 Vector2 new_pos = angleToVector((float)ang);
 
+                float oldX = x;
+                float oldY = y;
+
                 x += new_pos.X * (float)speed * delta * 200;
                 y += new_pos.Y * (float)speed * delta * 200;
+
+                for (int i = 0; i < map.Count; i++)
+                {
+                    Rectangle p = new Rectangle((int)x, (int)y, texture.Width, texture.Height);
+                    if (map[i].Intersects(p))
+                    {
+                        x = oldX;
+                        y = oldY;
+                        speed = 0;
+                    }
+                }
             }
         }
 
@@ -249,11 +305,10 @@ namespace SpaceGame
         public void draw(SpriteBatch pen, GameTime gameTime, Camera2D camera, SpriteFont smallMenuFont)
         {
             pen.Draw(texture, player_pos, null, Color.White, (float)ang, origin, 1.0f, SpriteEffects.None, 0f);
-            foreach (Missile missile in missiles)
-                missile.Draw(pen, gameTime);
             Rectangle bounds = camera.getBounds();
             Vector2 center = new Vector2(camera.Location.X, camera.Location.Y);
             pen.DrawString(smallMenuFont, "Raw Resources: " + RawResources, new Vector2(center.X - smallMenuFont.MeasureString("Raw Resources: " + RawResources).X / 2, (int)(center.Y - camera.getBounds().Height / 2)), Color.White);
+            pen.DrawString(smallMenuFont, "Health: " + health, new Vector2(player_pos.X-100, player_pos.Y-50), Color.Green);
         }
 
         public Rectangle getRectangle()
@@ -261,13 +316,6 @@ namespace SpaceGame
             return new Rectangle((int)player_pos.X, (int)player_pos.Y, texture.Width, texture.Height);
         }
 
-        public List<Missile> Missiles
-        {
-            get
-            {
-                return missiles;
-            }
-        }
 
         public int RawResources
         {

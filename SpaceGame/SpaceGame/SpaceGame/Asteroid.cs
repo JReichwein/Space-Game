@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace SpaceGame
 {
-    class Asteroid
+    class Asteroid : Collidable
     {
         private Vector2 position;
         private Rectangle bounds;
@@ -36,7 +36,7 @@ namespace SpaceGame
 
         string[] enterPrompt = new String[2] { "Hold A to mine", "Hold E to mine" };
 
-        public Asteroid(Texture2D texture, Vector2 position, SpriteFont menuFont)
+        public Asteroid(Texture2D texture, Vector2 position, SpriteFont menuFont) : base(0,0,"astroid")
         {
             this.position = position;
             bounds = new Rectangle((int)position.X, (int)position.Y, 20, 20);
@@ -50,6 +50,9 @@ namespace SpaceGame
 
             this.menuFont = menuFont;
             texture = null;
+
+            base.x = position.X;
+            base.y = position.Y;
         }
 
         public bool mine()
@@ -62,10 +65,6 @@ namespace SpaceGame
             return (amountMineLeft <= 0);
         }
 
-        public void Update(GameTime gameTime)
-        {
-
-        }
 
         public void Draw(Texture2D texture, GameTime gameTime, SpriteBatch sb, Player p)
         {
