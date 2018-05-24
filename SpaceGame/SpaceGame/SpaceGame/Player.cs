@@ -59,7 +59,7 @@ namespace SpaceGame
         private double topSpeed = 1.2;
         public bool isMoving = false;
         private int resources = 0;
-        private int rawResources = 0;
+        private int rawResources = 200;
         private int storage = 100;
         private double damage = 1;
 
@@ -84,23 +84,26 @@ namespace SpaceGame
         {
             last = null;
 
-            for (int i = 0; i < bullets.Count; i++)
-                if (bullets[i].tag.Equals("en"))
-                {
-                    if (bullets[i].Rectangle.Intersects(new Rectangle((int)player_pos.X, (int)player_pos.Y, texture.Width, texture.Height)))
-                    {
-                        health -= .5f;
-                        bullets[i].collided = true;
-                    }
-                }
-
-
             if (!inHub)
                 if (!controller(gameTime, c, map))
                     keyboard(gameTime, c, map);
 
             player_pos.X = x;
             player_pos.Y = y;
+
+
+            for (int i = 0; i < bullets.Count; i++)
+                if (bullets[i].tag.Equals("en"))
+                {
+                    Rectangle rect = new Rectangle((int)bullets[i].Location.X, (int)bullets[i].Location.Y, 20, 20);
+                    if (rect.Intersects(new Rectangle((int)player_pos.X, (int)player_pos.Y, 20, 20)))
+                    {
+
+                        health -= .5f;
+                        bullets[i].collided = true;
+                    }
+                }
+
 
 
 
@@ -132,7 +135,7 @@ namespace SpaceGame
                 {
                     //Timer expired, execute action
                     last = new Missile(c, player_pos, ang, origin, (int)(topSpeed * (5.0/1.2)));
-
+                    last.tag = "player";
                     timer = 0;   //Reset Timer
                 }
             }
