@@ -97,7 +97,7 @@ namespace SpaceGame
             float distance = Vector2.Distance(p1, current_pos);
             if (distance < 200 && distance > 20)
             {
-                if (timer > 15)
+                if (timer > 30)
                 {
                     timer = 0;
                     shoot();

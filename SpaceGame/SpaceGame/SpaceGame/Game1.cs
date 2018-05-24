@@ -163,7 +163,7 @@ namespace SpaceGame
             p1 = new Player(Content);
             hub = new Hub(Content);
             mp = new map();
-            mp.make_map(2500, hub);
+            mp.make_map(2000, hub);
             doDraw();
             drawing.Start();
             rock = Content.Load<Texture2D>("Asteroid1");
