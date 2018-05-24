@@ -99,7 +99,7 @@ namespace SpaceGame
                     if (rect.Intersects(new Rectangle((int)player_pos.X, (int)player_pos.Y, 20, 20)))
                     {
 
-                        health -= .5f;
+                        health -= 2.000000000005f;
                         bullets[i].collided = true;
                     }
                 }

@@ -39,7 +39,7 @@ namespace SpaceGame
             this.y = y;
             this.health = 10;
             current_pos = new Vector2(x, y);
-            texture = man.Load<Texture2D>("player");
+            texture = man.Load<Texture2D>("Enemy");
             font = man.Load<SpriteFont>("SmallMenuFont");
             center = new Vector2(texture.Width / 2, texture.Height / 2);
             last = null;
@@ -95,9 +95,9 @@ namespace SpaceGame
 
             this.time = time;
             float distance = Vector2.Distance(p1, current_pos);
-            if (distance < 200 && distance > 20)
+            if (distance < 300 && distance > 100)
             {
-                if (timer > 30)
+                if (timer > 60)
                 {
                     timer = 0;
                     shoot();
@@ -105,9 +105,9 @@ namespace SpaceGame
                 lookAt(p1);
                 moveTo(p1);
             }
-            else if (distance < 200 && distance < 20)
+            else if (distance < 300 && distance < 100)
             {
-                if (timer > 15)
+                if (timer > 60)
                 {
                     timer = 0;
                     shoot();

@@ -277,6 +277,14 @@ namespace SpaceGame
                 for (int i = 0; i < miss.Count; i++)
                 {
                     miss[i].Update();
+
+                    if (miss[i].Location.X < (p1.player_pos.X - 500) || miss[i].Location.X > (p1.player_pos.X + 500) || miss[i].Location.Y < (p1.player_pos.Y - 500) || miss[i].Location.Y > (p1.player_pos.Y + 500))
+                    {
+                        miss.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+
                     if (miss[i].collided)
                     {
                         miss.RemoveAt(i);
@@ -296,7 +304,8 @@ namespace SpaceGame
 
                 for(int i = 0; i < mainMenuButtons.Length; i++)
                 {
-                    if(mainMenuButtons[i].Intersects(new Rectangle((int)mousePosition.X, (int)mousePosition.Y, 1, 1)))
+
+                    if (mainMenuButtons[i].Intersects(new Rectangle((int)mousePosition.X, (int)mousePosition.Y, 1, 1)))
                     {
                         mainMenuColors[i] = Color.Red;
                         if(mouse.LeftButton == ButtonState.Pressed && oldMouse.LeftButton != ButtonState.Pressed)

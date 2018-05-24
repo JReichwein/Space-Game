@@ -21,6 +21,7 @@ namespace SpaceGame
         int speed;
         public string tag;
         public bool collided = false;
+        int time = 0;
 
 
         public Missile(ContentManager c, Vector2 location, double heading, Vector2 origin, int speed) 
@@ -43,6 +44,7 @@ namespace SpaceGame
             posY += speed * -Math.Cos(heading);
             missileCenter = new Vector2((int)posX + missileRect.Width / 2,
                                         (int)posY + missileRect.Height / 2);
+            time++;
         }
 
         private float vectorToAngle(Vector2 angleVector)
