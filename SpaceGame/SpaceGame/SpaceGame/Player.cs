@@ -102,6 +102,8 @@ namespace SpaceGame
             player_pos.X = x;
             player_pos.Y = y;
 
+
+
             return last;
 
         }
@@ -134,18 +136,6 @@ namespace SpaceGame
                     timer = 0;   //Reset Timer
                 }
             }
-
-            // Debug Commands
-            /*
-            if (pad.DPad.Up == ButtonState.Pressed)
-                resources++;
-            if (pad.DPad.Down == ButtonState.Pressed)
-                resources--;
-            if (pad.DPad.Right == ButtonState.Pressed)
-                rawResources++;
-            if (pad.DPad.Left == ButtonState.Pressed)
-                rawResources--;
-                */
 
             if (pad.ThumbSticks.Right.X != 0 || pad.ThumbSticks.Right.Y != 0)
             {
@@ -183,6 +173,7 @@ namespace SpaceGame
         public void keyboard(GameTime gameTime, ContentManager c, List<Asteroid> map)
         {
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
 
             KeyboardState kb = Keyboard.GetState();
             oldang = ang;
