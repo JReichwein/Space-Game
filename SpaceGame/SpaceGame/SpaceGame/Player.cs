@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SpaceGame
 {
-    class Camera2D
+    public class Camera2D
     {
         public float Zoom { get; set; }
         public Vector2 Location { get; set; }
@@ -40,7 +40,7 @@ namespace SpaceGame
         }
     };
 
-    class Player
+    public class Player
     {
 
         Missile last;
@@ -80,7 +80,7 @@ namespace SpaceGame
             player_pos = new Vector2((int)x, (int)y);
         }
 
-        public Missile update(GameTime gameTime, ContentManager c, bool inHub, List<Rectangle> map, List<Missile> bullets)
+        public Missile update(GameTime gameTime, ContentManager c, bool inHub, List<Asteroid> map, List<Missile> bullets)
         {
             last = null;
 
@@ -114,7 +114,7 @@ namespace SpaceGame
         float timer = 0;
 
 
-        public bool controller(GameTime gameTime, ContentManager c, List<Rectangle> map)
+        public bool controller(GameTime gameTime, ContentManager c, List<Asteroid> map)
         {
 
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -163,24 +163,11 @@ namespace SpaceGame
 
                 Vector2 new_pos = angleToVector(MathHelper.ToRadians((float)ang));
 
-                float oldX = x;
-                float oldY = y;
-
                 x += new_pos.X * (float)topSpeed * delta * 200;
                 y += new_pos.Y * (float)topSpeed * delta * 200;
 
                 oldang = ang;
                 ang = (float)MathHelper.ToRadians((float)ang);
-
-                for (int i = 0; i < map.Count; i++)
-                {
-                    Rectangle p = new Rectangle((int)x, (int)y, texture.Width, texture.Height);
-                    if (map[i].Intersects(p))
-                    {
-                        x = oldX;
-                        y = oldY;
-                    }
-                }
 
                 return true;
             }
@@ -193,7 +180,7 @@ namespace SpaceGame
         }
 
 
-        public void keyboard(GameTime gameTime, ContentManager c, List<Rectangle> map)
+        public void keyboard(GameTime gameTime, ContentManager c, List<Asteroid> map)
         {
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -241,23 +228,9 @@ namespace SpaceGame
                 //const movement
                 Vector2 new_pos = angleToVector((float)oldang);
 
-
-                float oldX = x;
-                float oldY = y;
-
                 x += new_pos.X * (float)speed * delta * 200;
                 y += new_pos.Y * (float)speed * delta * 200;
 
-                for (int i = 0; i < map.Count; i++)
-                {
-                    Rectangle p = new Rectangle((int)x, (int)y, texture.Width, texture.Height);
-                    if (map[i].Intersects(p))
-                    {
-                        x = oldX;
-                        y = oldY;
-                        speed = 0;
-                    }
-                }
             }
             if (kb.IsKeyDown(Keys.S) || kb.IsKeyDown(Keys.Down))
             {
@@ -281,22 +254,9 @@ namespace SpaceGame
                 //xtra const movement, probably could be removed
                 Vector2 new_pos = angleToVector((float)ang);
 
-                float oldX = x;
-                float oldY = y;
-
                 x += new_pos.X * (float)speed * delta * 200;
                 y += new_pos.Y * (float)speed * delta * 200;
 
-                for (int i = 0; i < map.Count; i++)
-                {
-                    Rectangle p = new Rectangle((int)x, (int)y, texture.Width, texture.Height);
-                    if (map[i].Intersects(p))
-                    {
-                        x = oldX;
-                        y = oldY;
-                        speed = 0;
-                    }
-                }
             }
         }
 

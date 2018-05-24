@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SpaceGame
 {
-    class Missile 
+    public class Missile 
     {
         Texture2D missileTex;
         Rectangle missileRect;

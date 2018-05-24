@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,90 +8,34 @@ namespace SpaceGame
 {
     public class map
     {
-        public string[,] world;
-        double[,] world_int;
-        double astroid_perctange = .25;
-        public int len = 0;
+        public List<Vector2> mp;
+        static Random rand = new Random();
 
-        public map(int len)
+        public map()
         {
-            world = new string[len, len];
-            world_int = new double[len, len];
-            this.len = len;
-
+            mp = new List<Vector2>();
         }
 
-        void make_map()
+        public void make_map(int radius, Hub hb)
         {
-            Random rand = new Random();
+            float diam = radius / 2f;
+            float diamsq = diam * diam;
 
-            for (int i = 0; i < len; i++)
+            for (int x = 0; x < radius; x++)
             {
-                for (int y = 0; y < len; y++)
+                for (int y = 0; y < radius; y++)
                 {
-                    world_int[i, y] = rand.NextDouble();
-                }
-            }
-        }
-
-        double get_average(int x, int y)
-        {
-            double average = 0;
-            if (x > 0)
-                average += world_int[x - 1, y];
-
-            if (x < len - 1)
-                average += world_int[x + 1, y];
-
-            if (y > 0)
-                average += world_int[x, y - 1];
-
-            if (y < len - 1)
-                average += world_int[x, y + 1];
-
-            if (average > 0)
-                return average / 4;
-            else
-                return world_int[x, y];
-        }
-
-        void beautify()
-        {
-            for (int i = 0; i < len; i++)
-            {
-                for (int y = 0; y < len; y++)
-                {
-                    world_int[i, y] = get_average(i, y);
-                }
-            }
-        }
-
-        public void generate()
-        {
-
-            make_map();
-            beautify();
-
-            int rockCount = 0;
-
-            for (int i = 0; i < len; i++)
-            {
-                for (int y = 0; y < len; y++)
-                {
-                    if (world_int[i, y] <= astroid_perctange)
+                    Vector2 pos = new Vector2(x - diam, y - diam);
+                    pos.X *= 20;
+                    pos.Y *= 20;
+                    if (rand.NextDouble() < .01 && !hb.isWithinRadius(new Rectangle((int)pos.X, (int)pos.Y, 20, 20)))
                     {
-                        world[i, y] = "R";
-                        rockCount++;
-                    }
-                    else
-                    {
-                        world[i, y] = "E";
-                    }
+                        mp.Add(pos);
+                    }  
                 }
             }
-
-            Console.WriteLine("Rocks: " + rockCount);
         }
+           
     }
 
 }

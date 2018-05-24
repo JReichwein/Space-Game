@@ -68,17 +68,9 @@ namespace SpaceGame
 
         void doDraw()
         {
-            for (int i = 0; i < mp.len; i++)
-            {
-                for (int y = 0; y < mp.len; y++)
-                {
-                    if (mp.world[i, y] == "R")
-                    {
-                        Vector2 rect = new Vector2(i * 50, y * 50);
-                        asteroids.Add(new Asteroid(rock, rect, menuFont));
-                    }
-
-                }
+            for(int i=0; i<mp.mp.Count; i++)
+            { 
+                asteroids.Add(new Asteroid(rock, mp.mp[i], menuFont));
             }
         }
 
@@ -154,8 +146,8 @@ namespace SpaceGame
             menuFont = Content.Load<SpriteFont>("MenuFont");
             p1 = new Player(Content);
             hub = new Hub(Content);
-            mp = new map(100);
-            mp.generate();
+            mp = new map();
+            mp.make_map(500, hub);
             doDraw();
             drawing.Start();
             rock = Content.Load<Texture2D>("Asteroid1");
@@ -245,7 +237,7 @@ namespace SpaceGame
                     }
                 }
                 
-                Missile ret = p1.update(gameTime, Content, hub.isInHub(), player_map, miss);
+                Missile ret = p1.update(gameTime, Content, hub.isInHub(), asteroids, miss);
 
                 if (ret != null)
                     miss.Add(ret);

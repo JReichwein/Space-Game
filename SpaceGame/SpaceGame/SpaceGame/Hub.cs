@@ -236,7 +236,7 @@ namespace SpaceGame
         }
     };
 
-    class Hub
+    public class Hub
     {
         private Vector2 hubOrigin, radiusOrigin, hub_pos;
         private Texture2D hubText, radiusText, backgroundText;
